@@ -1,0 +1,17 @@
+img {
+  width: 100%;
+  object-fit: contain;
+}
+.dialog-header-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.img-subtitle-dialog {
+  color: rgba(0,0,0,.6);
+  font-size: 0.9em;
+}
+.dialog-close-btn {
+  margin-top: -30px;
+  margin-right: -10px;
+}

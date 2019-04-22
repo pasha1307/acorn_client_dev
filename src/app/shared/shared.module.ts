@@ -1,0 +1,121 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {LayoutModule} from '@angular/cdk/layout';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatDatepickerModule, MatDialogModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSlideToggleModule, MatSortModule, MatTableModule, MatTabsModule,
+  MatToolbarModule, MatTooltipModule
+} from '@angular/material';
+import {FilterPipeModule} from 'ngx-filter-pipe';
+import {HttpClientModule} from '@angular/common/http';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {OrderModule} from 'ngx-order-pipe';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {NgxPrintModule} from 'ngx-print';
+import {FileSizeModule} from 'ngx-filesize';
+
+@NgModule({
+  declarations: [],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    LayoutModule,
+    MatRippleModule,
+    FilterPipeModule,
+    HttpClientModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatProgressBarModule,
+    MatListModule,
+    MatMenuModule,
+    MatGridListModule,
+    MatCardModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    MatFormFieldModule,
+    MatChipsModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatExpansionModule,
+    MatTableModule,
+    MatTabsModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatProgressSpinnerModule,
+    OrderModule,
+    FlexLayoutModule,
+    NgxPrintModule,
+    MatProgressBarModule,
+    MatDialogModule,
+    MatTooltipModule,
+    FileSizeModule,
+  ],
+  exports: [
+    CommonModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    LayoutModule,
+    MatRippleModule,
+    FilterPipeModule,
+    HttpClientModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatMenuModule,
+    MatGridListModule,
+    MatCardModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    MatFormFieldModule,
+    MatChipsModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatExpansionModule,
+    MatTableModule,
+    MatTabsModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatProgressSpinnerModule,
+    OrderModule,
+    FlexLayoutModule,
+    NgxPrintModule,
+    MatProgressBarModule,
+    MatDialogModule,
+    MatTooltipModule,
+    FileSizeModule
+  ]
+})
+export class SharedModule { }

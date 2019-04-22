@@ -1,0 +1,84 @@
+:host {
+  /*display: block;*/
+}
+
+.locations-accordion {
+  padding: 5px;
+}
+mat-expansion-panel-header {
+  padding: 6px;
+}
+.location-search {
+  width: 100%;
+  text-align: center;
+}
+.location-search > * {
+  max-width: 300px;
+}
+.location-create-new {
+  width: 100%;
+  /*background-color: rgba(0,0,0,.3);*/
+  text-align: center;
+}
+.location-create-new  mat-panel-title {
+  color: rgba(151,36,55,1);
+  text-transform: uppercase;
+}
+.location-create-new mat-expansion-panel {
+  width: 400px;
+  margin: 5px auto;
+}
+.list-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  width: 100%;
+  max-height: 90vh;
+  justify-content: space-around;
+}
+mat-expansion-panel {
+  max-width: 360px;
+  margin: 5px;
+}
+mat-form-field {
+  width: 100%;
+}
+mat-action-row {
+  /*background-color: pink;*/
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.list-form-location {
+  max-width: 230px;
+}
+
+.location-status-label {
+  padding-right: 70px;
+}
+.location-status-label.active {
+  font-style: italic;
+  color: green;
+}
+.location-status-label.inactive {
+  font-style: italic;
+  color: red;
+}
+.repo-status-label {
+  padding-right: 40px;
+}
+.repo-status-label.active {
+  font-style: italic;
+  color: green;
+}
+.repo-status-label.inactive {
+  font-style: italic;
+  color: red;
+}
+
+mat-slide-toggle {
+  /*background-color: green;*/
+  text-align: right;
+  width: 100%;
+  margin-bottom: 5px;
+}
+

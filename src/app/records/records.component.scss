@@ -1,0 +1,30 @@
+:host {
+  margin-top: 80px;
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+  display: block;
+  background-color: ghostwhite;
+  > * {
+    width: 900px;
+    margin: auto;
+  }
+  mat-table {
+    min-height: 350px;
+  }
+  mat-form-field {
+    max-width: 350px;
+  }
+  table, mat-paginator {
+    max-width: 1200px;
+    width: 100%;
+    margin: auto;
+    tr:hover {
+      cursor: pointer;
+      background-color: rgba(2,64,106,.2);
+      //td {
+      //  color: whitesmoke;
+      //}
+    }
+  }
+}

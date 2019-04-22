@@ -1,0 +1,39 @@
+img {
+  width: 100%;
+  object-fit: contain;
+}
+.dialog-header-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.img-subtitle-dialog {
+  color: rgba(0,0,0,.6);
+  font-size: 0.9em;
+}
+.dialog-close-btn {
+  margin-top: -30px;
+  margin-right: -10px;
+}
+.record-item-detail {
+  p {
+    font-size: 0.9em;
+    text-align: left;
+    line-height: 90%;
+    span {
+      font-style: italic;
+      color: #bf360c;
+    }
+  }
+  table {
+    //background-color: pink;
+    width: 100%;
+    font-size: 0.9em;
+    text-align: left;
+    line-height: 90%;
+
+    tr {
+      border-bottom: 1px dotted rgba(0, 0, 0, .4);
+    }
+  }
+}

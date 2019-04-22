@@ -1,0 +1,117 @@
+:host {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+}
+mat-form-field {
+  width: 100%;
+}
+mat-card {
+  margin: 5px;
+}
+
+mat-radio-group {
+  font-size: 0.9em;
+  > * {
+    margin: 5px 4px;
+  }
+}
+.card-record-title {
+  text-align: center;
+  max-height: 50px;
+  .group-card-header {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  mat-form-field {
+    max-width: 300px;
+    margin: 5px auto;
+  }
+}
+.cards-wrapper {
+  display: flex;
+  max-width: 1500px;
+  margin: 5px auto;
+  > * {
+    flex: 1 1 300px;
+    min-width: 150px;
+  }
+}
+.call-numbers-chip-list {
+  mat-chip {
+    font-size: 0.8em;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+}
+.work-assigned-chip-list {
+  mat-chip {
+    font-size: 0.8em;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+.submit-mat-card {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+.hollis-div {
+  display: flex;
+  margin-top: 15px;
+  mat-form-field {
+    min-width: 30px;
+  }
+  .hollis-small {
+    color: white;
+  }
+  .hollis-link {
+    margin-right: 3px;
+  }
+}
+.chargeto-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  mat-radio-group {
+    max-width: 80px;
+    //background-color: pink;
+    mat-radio-button {
+      margin-bottom: 3px;
+    }
+  }
+  .chargeto-field {
+    min-width: 50px;
+  }
+}
+.work-assigned-small span {
+  font-style: italic;
+}
+.record-items {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: baseline;
+  max-width: 100%;
+  font-size: 0.9em;
+  label {
+    margin-right: 10px;
+  }
+  mat-form-field {
+    min-width: 30px;
+  }
+}
+.record-items > mat-form-field:nth-of-type(1) {
+  max-width: 50px;
+  margin-right: 10px;
+}
+mat-divider {
+  border: 4px solid inherit;
+}
+.not-collection-checkbox {
+  margin: 15px 10px 20px 5px;
+}

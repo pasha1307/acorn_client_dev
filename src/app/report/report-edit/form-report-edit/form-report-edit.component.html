@@ -1,0 +1,328 @@
+<div class="report-edit-header-div">
+  <h2>Report #{{report?.reportId}}</h2>
+</div>
+<div class="cards-wrapper">
+  <form #f="ngForm" (ngSubmit)="onSaveEdit(f)">
+    <!--COLUMN ONE-->
+    <mat-card class="card-column-one">
+      <!--Report Date-->
+      <mat-form-field appearance="outline">
+        <input
+          #reportDate
+          matInput
+          name="reportDate"
+          [ngModel]="report?.reportDate"
+          [matDatepicker]="picker"
+          placeholder="Choose a date"
+          required
+        >
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <label>Report Date {{reportDate.value | date}}</label>
+      </mat-form-field>
+      <!--Report By-->
+      <mat-form-field appearance="outline">
+        <mat-label>Report By: {{reportBy.value}}</mat-label>
+        <mat-select
+          #reportBy=ngModel
+          name="reportById"
+          [ngModel]="report?.reportById"
+          required
+        >
+          <mat-option *ngFor="let c of coordinators | orderBy: order"
+                      [value]="c.personId">{{c.sortName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!--Work Location goes to ItemReport table-->
+      <mat-form-field appearance="outline">
+        <mat-select
+          #workLocation=ngModel
+          name="workLocationId"
+          [ngModel]="report?.workLocationId"
+          required>
+          <mat-option
+            *ngFor="let rp of locations[0].Locations"
+            [value]="rp.locationId">
+            {{rp.location}}
+          </mat-option>
+        </mat-select>
+        <mat-label> Work Location: {{workLocation.value}}</mat-label>
+      </mat-form-field>
+      <!--formatId-->
+      <mat-form-field appearance="outline">
+        <mat-select
+          #reportFormat=ngModel
+          name="formatId"
+          [ngModel]="report?.formatId"
+          required>
+          <mat-option *ngFor="let fm of formats[0].Formats" [value]="fm.formatId">
+            {{fm.format}}
+          </mat-option>
+        </mat-select>
+        <mat-label>Format: {{reportFormat.value}}</mat-label>
+      </mat-form-field>
+      <!--importance-->
+      <mat-form-field appearance="outline">
+        <mat-select
+          #imp=ngModel
+          name="importanceId"
+          [ngModel]="report?.itemImportance.importanceId"
+          required>
+          <mat-option *ngFor="let el of importance[0].Importance" [value]="el.importanceId">
+            {{el.importance}}
+          </mat-option>
+        </mat-select>
+        <mat-label>Importance {{imp.value}} </mat-label>
+      </mat-form-field>
+    </mat-card>
+    <!--COLUMN TWO-->
+    <mat-card class="card-column-two">
+      <mat-card-content>
+        <fieldset>
+          <legend>Dimensions</legend>
+          <mat-form-field >
+            <mat-select
+              #unit=ngModel
+              value="in"
+              name="dimensionUnit"
+              [ngModel]="report?.dimensionUnit"
+            >
+              <mat-option value="in">Inches</mat-option>
+              <mat-option value="cm" >Cm</mat-option>
+            </mat-select>
+            <mat-label>Unit: ({{unit.value}})</mat-label>
+          </mat-form-field>
+          <mat-form-field >
+            <input
+              #ht=ngModel
+              matInput
+              name="height"
+              [ngModel]="report?.height"
+              type="number"
+            >
+            <mat-label> Height {{ht.value}}</mat-label>
+            <span matSuffix>.00</span>
+          </mat-form-field>
+          <mat-form-field >
+            <input
+              #wth=ngModel
+              matInput
+              name="width"
+              [ngModel]="report?.width"
+              placeholder="Width"
+              type="number"
+            >
+            <mat-label>Width {{wth.value}}</mat-label>
+            <span matSuffix>.00</span>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              #thick=ngModel
+              matInput
+              name="thickness"
+              [ngModel]="report?.thickness"
+              placeholder="Thickness"
+              type="number"
+            >
+            <mat-label> Thickness {{thick.value}}</mat-label>
+            <span matSuffix>.00</span>
+          </mat-form-field>
+        </fieldset>
+      </mat-card-content>
+    </mat-card>
+    <!--COLUMN THREE-->
+    <mat-card class="card-column-three">
+      <mat-card-content>
+        <fieldset>
+          <legend>Item Count*</legend>
+          <!--volumes-->
+          <div class="record-items">
+            <label mat-line>Volumes</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="volumeCount"
+                     [ngModel]="report?.reportCounts[0]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+              <textarea matInput
+                        placeholder="description"
+                        name="volumeDescription"
+                        [ngModel]="report?.reportCounts[0]?.description"
+              ></textarea>
+            </mat-form-field>
+          </div>
+          <!--sheets-->
+          <div class="record-items">
+            <label>Sheets</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="sheetCount"
+                     [ngModel]="report?.reportCounts[1]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput
+                     placeholder="description"
+                     name="sheetDescription"
+                     [ngModel]="report?.reportCounts[1]?.description"
+              >
+              <mat-label> description</mat-label>
+            </mat-form-field>
+          </div>
+          <!--photos-->
+          <div class="record-items">
+            <label>Photos</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="photoCount"
+                     [ngModel]="report?.reportCounts[2]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+<textarea matInput
+          placeholder="description"
+          name="photoDescription"
+          [ngModel]="report?.reportCounts[2]?.description"
+></textarea>
+              <!--<mat-label> description</mat-label>-->
+            </mat-form-field>
+          </div>
+          <!--other-->
+          <div class="record-items">
+            <label>Other</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="otherCount"
+                     [ngModel]="report?.reportCounts[3]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+<textarea matInput
+          placeholder="description"
+          name="otherDescription"
+          [ngModel]="report?.reportCounts[3]?.description"
+></textarea>
+            </mat-form-field>
+          </div>
+          <!--housing-->
+          <div class="record-items">
+            <label>Housing</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="housingCount"
+                     [ngModel]="report?.reportCounts[4]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+<textarea matInput
+          placeholder="description"
+          name="housingDescription"
+          [ngModel]="report?.reportCounts[4]?.description"
+></textarea>
+              <!--<mat-label> description</mat-label>-->
+            </mat-form-field>
+          </div>
+          <!--boxes-->
+          <div class="record-items">
+            <label>Boxes</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="boxesCount"
+                     [ngModel]="report?.reportCounts[5]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+<textarea matInput
+          placeholder="description"
+          name="boxesDescription"
+          [ngModel]="report?.reportCounts[5]?.description"
+></textarea>
+              <!--<mat-label> description</mat-label>-->
+            </mat-form-field>
+          </div>
+        </fieldset>
+
+      </mat-card-content>
+    </mat-card>
+    <!--&lt;!&ndash;COL FOUR&ndash;&gt;-->
+    <mat-card class="card-column-four">
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="report-treatment-ta">
+            <textarea
+              matInput
+              name="treatment"
+              [ngModel]="report?.treatment"
+              placeholder="Treatment"></textarea>
+          <mat-label> Treatment</mat-label>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="report-recommendation-ta">
+            <textarea
+              name="recommendations"
+              [ngModel]="report?.preservationRecommendations"
+              matInput
+              placeholder="Preservation Recommendations"></textarea>
+          <mat-label> Recommendations</mat-label>
+        </mat-form-field>
+        <mat-form-field class="report-summary-ta" appearance="outline">
+          <mat-label> Summary</mat-label>
+          <textarea
+            matInput
+            name="summary"
+            [ngModel]="report?.summary"
+            placeholder="Summary"></textarea>
+        </mat-form-field>
+        <mat-divider></mat-divider>
+        <div class="report-checkboxes-div">
+          <mat-checkbox
+            #adm=ngModel
+            name="adminOnly"
+            [checked]="report?.adminOnly"
+            [ngModel]="report?.adminOnly"
+          >Admin only {{adm.value}}</mat-checkbox>
+          <mat-checkbox
+            #exam=ngModel
+            name="examOnly"
+            [checked]="report?.examOnly"
+            [ngModel]="report?.examOnly"
+          >Exam only {{exam.value}}</mat-checkbox>
+          <mat-checkbox
+            #custom=ngModel
+            name="customHousingOnly"
+            [checked]="report?.customHousingOnly"
+            [ngModel]="report?.customHousingOnly"
+          >Custom housing only {{custom.value}}</mat-checkbox>
+          <mat-checkbox
+            #extra=ngModel
+            name="additionalMaterialsOnFile"
+            [checked]="report?.additionalMaterialsOnFile"
+            [ngModel]="report?.additionalMaterialsOnFile"
+          >Additional materials on file {{extra.value}}</mat-checkbox>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </form>
+</div>
+<ng-content></ng-content>
+<mat-card class="submit-mat-card mat-elevation-z10">
+  <!--<button mat-raised-button color="accent" type="button" (click)="onClear(f)">Cancel</button>-->
+  <button mat-raised-button color="primary" type="button" (click)="onSaveEdit(f)">Save Report</button>
+</mat-card>

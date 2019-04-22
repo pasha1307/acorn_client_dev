@@ -1,0 +1,52 @@
+.proposal-wrap {
+  max-width: 1100px;
+  margin: 70px auto;
+}
+form {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+fieldset {
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 3px;
+  min-width: 50px;
+}
+mat-form-field {
+  width: 100%;
+  min-width: 50px;
+}
+mat-card {
+  flex: 1;
+  min-width: 250px;
+  //max-width: 200px;
+}
+.proposal-card-column-three {
+  text-align: center;
+  //max-width: 450px;
+  flex: 3;
+  mat-form-field {
+    textarea {
+      min-height: 90px;
+    }
+  }
+}
+.mat-standard-chip {
+  padding: 10px 15px;
+  min-height: 10px;
+}
+mat-chip {
+  font-size: 1em;
+  mat-icon {
+    height: 14px;
+    width: 14px;
+    font-size: 14px;
+    padding-left: 5px;
+  }
+
+}
+mat-chip > * {
+  //height: 10px;
+  //line-height: 10px;
+}

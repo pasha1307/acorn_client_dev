@@ -1,0 +1,45 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+mat-tab-group {
+  max-width: 700px;
+}
+mat-accordion {
+  display: block;
+  margin-bottom: 10px;
+  background-color: #fff;
+  mat-expansion-panel {
+    box-shadow: none;
+  }
+}
+
+//Email Block
+.email-wrap-div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  mat-form-field {
+    width: 100%;
+  }
+  .section-email {
+    flex: 1;
+  }
+  .section-comment {
+    flex: 2;
+    margin-left: 40px;
+    mat-form-field {
+      textarea {
+        height: 200px;
+      }
+    }
+    min-height: 100%;
+  }
+}
+.report-del-button {
+  align-self: flex-start;
+}

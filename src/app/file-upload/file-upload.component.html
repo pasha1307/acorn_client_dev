@@ -1,0 +1,42 @@
+<!--<app-uploader (complete)="onFileComplete($event)" [text]="newText"></app-uploader>-->
+<mat-card class="upload-images-card">
+  <app-uploader (complete)="onFileComplete($event)" [text]="newText"></app-uploader>
+  <mat-card-content >
+      <div *ngIf="singleImg" class="file-upload-wrap">
+        <div *ngFor="let el of images; let i = index" class="imgFile">
+          <small>[{{el.name}}, {{el.size | filesize}}]</small>
+<!--          <p mat-line>{{el.name}}, {{el.size}}</p>-->
+          <img [src]="el.path" alt="" class="mat-elevation-z10">
+          <button mat-button color="warn" (click)="onDel(el)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+  </mat-card-content>
+  <div [style.display]="images.length > 0 ? 'block' : 'none'">
+    <mat-divider></mat-divider>
+  <form #f="ngForm">
+<!--    <mat-form-field>-->
+<!--      <input matInput placeholder="File Name" [value]="singleImg?.name" formControlName="name" required>-->
+<!--    </mat-form-field>-->
+    <mat-form-field>
+      <textarea matInput
+                placeholder="Description"
+                name="description" ngModel></textarea>
+    </mat-form-field>
+    <ng-container *ngIf="(coordinators$ | async) as coordinators">
+      <mat-form-field>
+        <mat-select #uploadBy=ngModel placeholder="Entered By" name="coordinatorId" [ngModel]="coordinatorId" [value]="coordinatorId">
+          <mat-option value="option" *ngFor="let c of coordinators | orderBy: order"
+                      [value]="c.personId">{{c.displayName}}</mat-option>
+        </mat-select>
+        <mat-label>{{uploadBy.value}}</mat-label>
+      </mat-form-field>
+    </ng-container>
+  </form>
+  <mat-action-row style="text-align: center">
+    <button mat-raised-button type="button" (click)="onSubmit(f)" color="primary">Submit</button>
+  </mat-action-row>
+  </div>
+  </mat-card>
+<ng-content></ng-content>

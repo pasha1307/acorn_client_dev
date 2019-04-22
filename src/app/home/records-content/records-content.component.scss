@@ -1,0 +1,23 @@
+mat-panel-description {
+  //background-color: green;
+  text-align: right;
+  max-width: 75px;
+}
+
+.record-item-detail {
+  p {
+    font-size: 0.9em;
+    text-align: left;
+    line-height: 90%;
+  }
+  table {
+    //background-color: pink;
+    width: 100%;
+    font-size: 0.9em;
+    text-align: left;
+    line-height: 90%;
+    tr {
+      border-bottom: 1px dotted rgba(0,0,0,.4);
+    }
+  }
+}

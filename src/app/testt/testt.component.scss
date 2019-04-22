@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+.proposal-wrap-div {
+  max-width: 1300px;
+  margin: auto;
+  mat-card {
+    max-width: 300px;
+  }
+
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+  }
+}
+mat-card.proposal-buttons-mat-card {
+  min-width: 100%;
+}
+fieldset {
+  border-radius: 5px;
+  border: 1px solid red;
+}
+

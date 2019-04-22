@@ -1,0 +1,60 @@
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+mat-card {
+  max-width: 330px;
+  text-align: center;
+  margin: 10px;
+}
+mat-expansion-panel {
+  width: 100%;
+  mat-form-field {
+    width: 100%;
+  }
+}
+.proposal-wrap {
+  width: 100vw;
+  max-width: 1300px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-direction: row;
+  > * {
+    flex: 1;
+    margin: 10px;
+    max-width: 600px;
+  }
+  .proposal-view-section {
+    max-width: 400px;
+    .proposal-expansion-panel {
+      margin: 0;
+      max-width: 400px;
+    }
+  }
+  .proposal-card-column-one {
+    max-width: 280px;
+    mat-form-field {
+      width: 100%;
+    }
+  }
+}
+.proposed-hours {
+  mat-form-field {
+    max-width: 80px;
+    margin: 0 10px;
+  }
+}
+.proposal-view-card {
+  max-width: 400px;
+  text-align: left;
+  p {
+    font-size: 0.9em;
+  }
+  span {
+    font-style: italic;
+    color: #bf360c;
+  }
+}
+

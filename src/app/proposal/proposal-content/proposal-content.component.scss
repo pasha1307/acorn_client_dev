@@ -1,0 +1,57 @@
+mat-expansion-panel {
+  width: 100%;
+  //margin-bottom: 5px;
+  p {
+    margin: 0 0 5px 0;
+  };
+  span {
+    font-weight: 200;
+  }
+}
+fieldset {
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 3px;
+  margin-bottom: 8px;
+  div {
+    text-align: right;
+    p {
+      font-size: 0.9em;
+      line-height: 100%;
+      font-style: italic;
+    }
+  }
+
+}
+.proposal-view-div {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  p {
+    line-height: 100%;
+  }
+  section {
+    flex:1;
+  }
+}
+.proposal-div {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  p {
+    line-height: 100%;
+  }
+  section {
+    flex:1;
+  }
+  table {
+    width: 100%;
+    font-size: 0.9em;
+    text-align: left;
+    line-height: 90%;
+    tr {
+      border-bottom: 2px solid black;
+    }
+  }
+}

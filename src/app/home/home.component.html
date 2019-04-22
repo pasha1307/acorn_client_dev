@@ -1,0 +1,78 @@
+<!--<div class="overview-wrap" *ngIf="isLoading">-->
+  <!--<div class="home-title">-->
+    <!--<div class="title-wrap">-->
+      <!--<div class="title-shadow">-->
+        <!--<span>A</span>-->
+        <!--<span>C</span>-->
+        <!--<span>O</span>-->
+        <!--<span>R</span>-->
+        <!--<span>N</span>-->
+      <!--</div>-->
+    <!--</div>-->
+    <!--<mat-divider></mat-divider>-->
+    <!--<div class="home-logo-img">-->
+      <!--<img src="../../assets/images/aclogo.svg" alt="">-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+<!--<section>-->
+  <!--<mat-progress-spinner mode="indeterminate"></mat-progress-spinner>-->
+<!--</section>-->
+<div class="overview-search">
+  <mat-form-field class="example-form-field">
+    <input matInput
+           type="text"
+           name="searchRecord"
+           placeholder="Search by Title"
+           [(ngModel)]="userFilter.title" >
+    <button mat-button *ngIf="userFilter.title" matSuffix mat-icon-button aria-label="Clear" (click)="userFilter.title =''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+</div>
+<div class="home-content-wrap" *ngIf="(items$ | async) as records">
+ <div class="div-button-wrap-record">
+   <button mat-raised-button color="primary" [routerLink]="['/app/new/record']"><span class="btn-span">new</span> Record</button>
+   <button mat-raised-button color="primary" [routerLink]="['/app/new/ows']"><span class="btn-span">new</span> OSW</button>
+   <button mat-raised-button color="primary" [routerLink]="['/app/new/group']"><span class="btn-span">new</span> Group</button>
+ </div>
+  <mat-tab-group >
+    <!--Record-Items List-->
+    <mat-tab label="Items">
+      <div class="home-accordion">
+        <mat-accordion>
+          <app-records-content
+            *ngFor="let r of records | filterBy: userFilter"
+            [r]="r"
+            (ondelete)="onDelete($event)"
+          >
+          </app-records-content>
+        </mat-accordion>
+      </div>
+    </mat-tab>
+    <!--OSW List-->
+    <mat-tab label="OSW">
+      <mat-accordion *ngIf="(osw$ | async) as records">
+        <app-osw-content
+          *ngFor="let r of records | filterBy: userFilter"
+          [r]="r"
+          (ondelete)="onDelete($event)"
+        ></app-osw-content>
+      </mat-accordion>
+    </mat-tab>
+    <!--Groups with Records List-->
+    <mat-tab label="Groups" #Groups>
+      <mat-accordion>
+          <app-groups-content [r]="r" *ngFor="let r of groups">
+            <a mat-button color="primary" [routerLink]="['/app/edit/group/', r.groupId]">Edit Group</a>
+            <button mat-button color="warn" (click)="onGroupStatus(r.groupId)">Deactivate</button>
+          </app-groups-content>
+      </mat-accordion>
+    </mat-tab>
+<!--    <mat-tab label="File Upload" #File>-->
+<!--        <app-file-upload></app-file-upload>-->
+<!--    </mat-tab>-->
+  </mat-tab-group>
+</div>
+

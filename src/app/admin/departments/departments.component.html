@@ -1,0 +1,119 @@
+<div class="location-search">
+  <mat-form-field class="search-location-field">
+    <input
+      #searchIn
+      matInput
+      type="text"
+      name="searchLocations"
+      placeholder="Search departments.." [(ngModel)]="userFilter.departmentName" >
+    <button *ngIf="searchIn.value" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="userFilter.departmentName=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field></div>
+<div class="location-create-new">
+  <mat-expansion-panel #panelForm>
+    <mat-expansion-panel-header class="location-panel-header">
+      <mat-panel-title>
+        <span *ngIf="!departmentName.value">
+          Create New Department
+        </span>
+        <span *ngIf="departmentName.value">
+          {{departmentName.value | uppercase}}
+        </span>
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form #f="ngForm" (ngSubmit)="onCreate(f)">
+      <div class="list-form-wrap">
+        <mat-form-field>
+          <mat-select
+            #repoVar
+            placeholder="Department's Location"
+            name="locationId"
+            ngModel required>
+            <mat-option
+              *ngFor="let rp of locations" [value]="rp.locationId"
+            > {{rp.location}} </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field >
+                <textarea matInput
+                          #departmentName
+                          name="departmentName"
+                          ngModel
+                          placeholder="Department Name"
+                          required
+                ></textarea>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput
+                 #shortName
+                 name="shortName"
+                 ngModel
+                 placeholder="Short Name"
+                 required
+          >
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput
+                 #acronym
+                 name="acronym"
+                 ngModel
+                 placeholder="Acronym"
+                 required
+          >
+        </mat-form-field>
+      </div>
+      <mat-action-row>
+        <button mat-button color="basic" type="button" (click)="onCancel(f)">Cancel</button>
+        <button mat-button color="primary" type="submit">Save</button>
+
+      </mat-action-row>
+    </form>
+  </mat-expansion-panel>
+</div>
+<mat-divider></mat-divider>
+<div class="list-wrap">
+
+  <mat-accordion class="" *ngFor="let l of departments | filterBy: userFilter">
+    <mat-expansion-panel >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{l?.departmentName}}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{l?.location['location']}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <form #lf="ngForm" (ngSubmit)="onUpdateDpt(lf, l.departmentId)">
+        <div class="list-form-wrap">
+          <mat-form-field >
+                <textarea matInput
+                          name="location"
+                          [ngModel]="l?.departmentName"
+                          placeholder="Department Name"
+                ></textarea>
+          </mat-form-field>
+          <mat-slide-toggle class="list-form-location-status" labelPosition="before"
+                            #locationStatus name="inactive" [(ngModel)]="l.inactive" color="primary">
+            Current Status
+            <span *ngIf="locationStatus.checked" class="location-status-label inactive">(Inactive)</span>
+            <span *ngIf="!locationStatus.checked" class="location-status-label active">(Active)</span>
+          </mat-slide-toggle>
+        </div>
+        <mat-action-row>
+          <button mat-button color="warn" type="button" (click)="onDelete(l.departmentId)">
+            Delete
+            <!--<mat-icon>delete_outlined</mat-icon>-->
+          </button>
+          <button mat-button color="primary" type="submit">
+            Save
+            <!--<mat-icon>save</mat-icon>-->
+          </button>
+        </mat-action-row>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+

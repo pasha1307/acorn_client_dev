@@ -1,0 +1,153 @@
+:host {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+}
+mat-form-field {
+  width: 100%;
+  min-width: 90px;
+}
+.cards-wrapper {
+  //max-width: 1200px;
+  //background-color: pink;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  .osw-edit-form {
+    display: flex;
+    justify-content: center;
+  }
+}
+mat-card {
+  flex: 1;
+  margin: 5px;
+  max-width: 200px;
+  min-width: 90px;
+}
+mat-card.record-edit-title-mat {
+  min-width: 100%;
+  max-height: 50px;
+  margin: 40px 0 10px 0;
+  padding: 0;
+}
+mat-card.submit-mat-card {
+  min-width: 100%;
+  margin: 0;
+}
+.chargeto-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  mat-radio-group {
+    max-width: 80px;
+    //background-color: pink;
+    mat-radio-button {
+      margin-bottom: 3px;
+    }
+  }
+  .chargeto-field {
+    min-width: 50px;
+  }
+}
+
+.card-record-title {
+  text-align: center;
+  mat-form-field {
+    max-width: 300px;
+    margin: 5px auto;
+  }
+}
+.call-numbers-chip-list {
+  mat-chip {
+    font-size: 0.9em;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+}
+.submit-mat-card {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+.hollis-div {
+  display: flex;
+  margin-top: 15px;
+  mat-form-field {
+    min-width: 30px;
+  }
+  .hollis-small {
+    color: white;
+  }
+  .hollis-link {
+    margin-right: 3px;
+  }
+}
+.record-items {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: baseline;
+  max-width: 100%;
+  font-size: 0.9em;
+  label {
+    margin-right: 10px;
+  }
+  mat-form-field {
+    min-width: 30px;
+  }
+}
+.record-items > mat-form-field:nth-of-type(1) {
+  max-width: 50px;
+  margin-right: 10px;
+}
+
+.osw-calendar-wrap {
+  width: 100%;
+  display: flex;
+  //flex-wrap: wrap;
+  justify-content: space-between;
+  mat-form-field {
+    //max-width: 150px;
+    margin: 5px;
+    min-width: 50px;
+    max-width: 130px;
+  }
+  > * {
+    flex: 1 1 auto;
+  }
+}
+.work-description-div {
+  margin-top: 25px;
+}
+.workhours-wrap {
+  max-width: 150px;
+  background-color: pink;
+}
+mat-expansion-pane {
+  width: 100%;
+}
+mat-panel-title {
+  width: 100%;
+}
+.work-done-section {
+  flex: 1;
+  max-width: 300px;
+  p {
+    font-size: 14px;
+  };
+  mat-chip {
+    font-size: 0.8em;
+    width: 100%;
+    margin-right: 5px;
+    mat-icon {
+      font-size: 20px;
+      line-height: 22px;
+      padding-left: 5px;
+    }
+  }
+}
+

@@ -1,0 +1,526 @@
+<form #f="ngForm" (ngSubmit)="onSaveOWS(f)">
+  <mat-card class="card-record-title">
+    <mat-card-content >
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Record Title"
+          name="title"
+          ngModel
+          required >
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+  <!--BLOCK1 1 - original LEFT UP -->
+  <div class="cards-wrapper">
+    <mat-card class="card-column-one">
+      <mat-card-content>
+        <!--Repository ID-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #repoLocation
+            name="homeLocationId"
+            ngModel
+            required>
+            <mat-option
+              *ngFor="let rp of repos[0].Repos"
+              [value]="rp.locationId">
+              {{rp.location}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Repository {{repoLocation.value}}</mat-label>
+        </mat-form-field>
+        <!--DepartmentId-->
+        <div *ngIf="repos[0].Repos && getDepartment(repoLocation.value) !== null">
+          <mat-form-field *ngIf="departments && departments.length > 0" appearance="outline">
+            <mat-select
+              #Dept
+              name="departmentId"
+              ngModel>
+              <mat-option *ngFor="let dep of departments"
+                          [value]="dep.departmentId">
+                {{dep.departmentName}}
+              </mat-option>
+            </mat-select>
+            <mat-label> Department {{Dept.value}}</mat-label>
+          </mat-form-field>
+        </div>
+        <!--Coordinator ID-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #coordinator
+            name="coordinatorId"
+            ngModel
+            required>
+            <mat-option
+              *ngFor="let p of coordinators | orderBy: order"
+              [value]="p.personId">
+              {{p.sortName}}
+            </mat-option>
+          </mat-select>
+          <mat-label>Coordinator {{coordinator.value}}</mat-label>
+        </mat-form-field>
+        <!--curatorId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #curator
+            name="curatorId"
+            ngModel
+            required
+          >
+            <mat-option *ngFor="let cur of curators | orderBy: order"
+                        [value]="cur.personId">
+              {{cur.sortName}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Curator {{curator.value}}</mat-label>
+        </mat-form-field>
+        <!--projectId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #project
+            name="projectId"
+            ngModel
+          >
+            <mat-option
+              *ngFor="let p of projects[0].Projects"
+              [value]="p.projectId">
+              {{p.projectName}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Project {{project.value}}</mat-label>
+        </mat-form-field>
+        <!--groupId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #Group
+            placeholder="Group ID"
+            name="groupId"
+            ngModel>
+            <mat-option
+              *ngFor="let p of groups[0].Groups"
+              [value]="p.groupId">
+              {{p.groupName}}
+            </mat-option>
+          </mat-select>
+          <mat-label>Group {{Group.value}}</mat-label>
+        </mat-form-field>
+        <!--purposeId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #Purpose
+            name="purposeId"
+            ngModel
+            required>
+            <mat-option
+              *ngFor="let ps of purposes[0].Purposes"
+              [value]="ps.purposeId">
+              {{ps.purpose}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Purpose {{Purpose.value}}</mat-label>
+        </mat-form-field>
+        <!--Charge To Buttons-->
+          <div class="chargeto-container">
+            <mat-card-content>
+              <mat-radio-group
+              class="chargetype-radio-group"
+              name="chargeToType"
+              [(ngModel)]="typeValue">
+              <mat-radio-button
+                value="patron" color="accent"
+                labelPosition="after">
+                Patron
+              </mat-radio-button>
+              <mat-radio-button
+                #chargeType
+                value="project" color="accent"
+                labelPosition="after">
+                Project
+              </mat-radio-button>
+              <mat-radio-button
+                value="repo" color="accent"
+                labelPosition="after">
+                Repository
+              </mat-radio-button>
+            </mat-radio-group>
+            </mat-card-content>
+            <!--chargeToId Input-->
+            <mat-form-field appearance="outline" class="chargeto-field">
+              <mat-select
+                [disabled]="!typeValue"
+                name="chargeToId"
+                #chargeToId
+                [value]="chargeToId.value"
+                ngModel
+                required>
+                <ng-container>
+                  <mat-optgroup label="Patrons" *ngIf="typeValue === 'patron'">
+                    <mat-option  *ngFor="let pt of typePatrons"
+                                 [value]="pt.ChargeToID">
+                      {{pt.ChargeToName}}
+                    </mat-option>
+                  </mat-optgroup>
+                </ng-container>
+                <ng-container>
+                  <mat-optgroup label="Projects" *ngIf="typeValue === 'project'">
+                    <mat-option
+                      [value]="pr.ChargeToID"
+                      *ngFor="let pr of typeProjects">
+                      {{pr.ChargeToName}}
+                    </mat-option>
+                  </mat-optgroup>
+                </ng-container>
+                <ng-container>
+                  <mat-optgroup label="Repositories" *ngIf="typeValue === 'repo'">
+                    <mat-option
+                      [value]="rp.ChargeToID"
+                      *ngFor="let rp of typeRepos">
+                      {{rp.ChargeToName}}
+                    </mat-option>
+                  </mat-optgroup>
+                </ng-container>
+              </mat-select>
+              <mat-label>Select {{chargeToId.value}}</mat-label>
+            </mat-form-field>
+          </div>
+      </mat-card-content>
+    </mat-card>
+    <!--COLUMN TWO-->
+    <mat-card class="card-column-two">
+      <mat-card-content>
+       <!--Work Location goes to ItemReport table-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #workLocation
+            name="workLocationId"
+            ngModel
+            required>
+            <mat-option
+              *ngFor="let rp of locations[0].Locations"
+              [value]="rp.locationId">
+              {{rp.location}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Work Location {{workLocation.value}}</mat-label>
+        </mat-form-field>
+        <!--work type-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            name="workTypeId"
+            ngModel
+            required>
+            <mat-option *ngFor="let fm of worktypes[0].WorkTypes | orderBy: workType" [value]="fm.workTypeId">
+              {{fm.workType}}
+            </mat-option>
+          </mat-select>
+          <mat-label>Work Type</mat-label>
+        </mat-form-field>
+        <!--formatId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #recordFormat
+            name="formatId"
+            ngModel
+            required>
+            <mat-option *ngFor="let fm of formats[0].Formats" [value]="fm.formatId">
+              {{fm.format}}
+            </mat-option>
+          </mat-select>
+          <mat-label>Format {{recordFormat.value}}</mat-label>
+        </mat-form-field>
+        <!--Calendar WorkStarts - Work Ends-->
+        <div class="osw-calendar-wrap">
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              name="workStartDate"
+              [matDatepicker]="picker"
+              [ngModel]="workStartDate"
+              placeholder="Start" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-label>Starts</mat-label>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <input
+              matInput
+              name="workEndDate"
+              [matDatepicker]="picker1"
+              [ngModel]="workEndDate"
+              placeholder="End">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+            <mat-label>Ends</mat-label>
+          </mat-form-field>
+        </div>
+        <!--proposed hours-->
+        <mat-form-field class="hours-proposed-field" appearance="outline">
+          <input
+            #propHours
+            matInput
+            ngModel
+            name="proposedHours"
+            type="number"
+          >
+          <mat-label> Hours Proposed</mat-label>
+        </mat-form-field>
+        <!--call numbers-->
+        <ng-container class="call-numbers-container">
+          <mat-form-field class="call-numbers-chip-list" appearance="outline">
+            <mat-chip-list #chipList>
+              <mat-chip *ngFor="let callN of callNumbers"
+                        [selectable]="selectable"
+                        [removable]="removable"
+                        (removed)="remove(callN)"
+                        color="primary" selected>
+                {{callN.callNumber}}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="Add Call Number..."
+                     matInput
+                     name="callNumber"
+                     [(ngModel)] = callNumber
+                     [matChipInputFor]="chipList"
+                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                     [matChipInputAddOnBlur]="addOnBlur"
+                     (matChipInputTokenEnd)="add($event)">
+            </mat-chip-list>
+          </mat-form-field>
+        </ng-container>
+        <mat-form-field class="field-record-comments" appearance="outline">
+          <mat-label> Comments</mat-label>
+          <textarea
+            matInput
+            name="comments"
+            ngModel
+            placeholder="comments"></textarea>
+        </mat-form-field>
+        </mat-card-content>
+    </mat-card>
+    <!--<mat-card>-->
+      <!--<mat-card-content>-->
+        <!--&lt;!&ndash;<mat-form-field appearance="outline">&ndash;&gt;-->
+          <!--&lt;!&ndash;<mat-label> Work Done By</mat-label>&ndash;&gt;-->
+          <!--&lt;!&ndash;<mat-select placeholder="Name"&ndash;&gt;-->
+                      <!--&lt;!&ndash;ngModel&ndash;&gt;-->
+                      <!--&lt;!&ndash;name="coordinatorId">&ndash;&gt;-->
+            <!--&lt;!&ndash;<mat-option *ngFor="let c of coordinators | orderBy: order"&ndash;&gt;-->
+                        <!--&lt;!&ndash;[value]="c.personId">{{c.displayName}}</mat-option>&ndash;&gt;-->
+          <!--&lt;!&ndash;</mat-select>&ndash;&gt;-->
+        <!--&lt;!&ndash;</mat-form-field>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="osw-work-wrap">&ndash;&gt;-->
+          <!--&lt;!&ndash;<mat-form-field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<input&ndash;&gt;-->
+              <!--&lt;!&ndash;matInput&ndash;&gt;-->
+              <!--&lt;!&ndash;name="workA"&ndash;&gt;-->
+              <!--&lt;!&ndash;[matDatepicker]="pickerA"&ndash;&gt;-->
+              <!--&lt;!&ndash;[ngModel]="workEnds"&ndash;&gt;-->
+              <!--&lt;!&ndash;placeholder="Date">&ndash;&gt;-->
+            <!--&lt;!&ndash;<mat-datepicker-toggle matSuffix [for]="pickerA"></mat-datepicker-toggle>&ndash;&gt;-->
+            <!--&lt;!&ndash;<mat-datepicker #pickerA></mat-datepicker>&ndash;&gt;-->
+          <!--&lt;!&ndash;</mat-form-field>&ndash;&gt;-->
+          <!--&lt;!&ndash;<mat-form-field>&ndash;&gt;-->
+            <!--&lt;!&ndash;<input matInput&ndash;&gt;-->
+                   <!--&lt;!&ndash;placeholder="Total Hours"&ndash;&gt;-->
+                   <!--&lt;!&ndash;name="hours"&ndash;&gt;-->
+                   <!--&lt;!&ndash;ngModel&ndash;&gt;-->
+            <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;</mat-form-field>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;Hours Proposed - Actual Hours&ndash;&gt;-->
+
+        <!--&lt;!&ndash;hours proposed&ndash;&gt;-->
+        <!--&lt;!&ndash;<mat-form-field class="hours-actual-field">&ndash;&gt;-->
+          <!--&lt;!&ndash;<input&ndash;&gt;-->
+            <!--&lt;!&ndash;#trueHours&ndash;&gt;-->
+            <!--&lt;!&ndash;matInput&ndash;&gt;-->
+            <!--&lt;!&ndash;ngModel&ndash;&gt;-->
+            <!--&lt;!&ndash;name="actualHours"&ndash;&gt;-->
+            <!--&lt;!&ndash;type="number"&ndash;&gt;-->
+          <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+          <!--&lt;!&ndash;<mat-label> Actual Hours</mat-label>&ndash;&gt;-->
+        <!--&lt;!&ndash;</mat-form-field>&ndash;&gt;-->
+      <!--</mat-card-content>-->
+    <!--</mat-card>-->
+    <!--BLOCK 5 - ORIGINAL SECOND ROW RIGHT-->
+    <!--ITEMS COUNT TABLE BLOCK - BOTTOM LEFT-->
+    <mat-card class="card-column-four">
+      <mat-card-content>
+        <mat-card-header>Item Count <span class="records-caption">(slide to edit)</span></mat-card-header>
+        <div class="records-right-align">
+          <mat-slide-toggle
+            color="primary"
+            name="editCounter"
+            ngModel
+            #editCounter></mat-slide-toggle>
+        </div>
+       <!--volumes-->
+        <div class="record-items">
+          <label mat-line>Volumes</label>
+          <mat-form-field>
+            <input matInput
+                   placeholder="count"
+                   type="number"
+                   name="volumeCount"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> count</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="volumeDescription"
+                    ngModel
+                    [disabled]="!editCounter.checked"
+          ></textarea>
+          </mat-form-field>
+        </div>
+        <!--sheets-->
+        <div class="record-items">
+          <label>Sheets</label>
+          <mat-form-field>
+            <input matInput
+                   placeholder="count"
+                   type="number"
+                   name="sheetCount"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> count</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput
+                   placeholder="description"
+                   name="sheetDescription"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> description</mat-label>
+          </mat-form-field>
+        </div>
+        <!--photos-->
+        <div class="record-items">
+          <label>Photos</label>
+          <mat-form-field>
+            <input matInput
+                   placeholder="count"
+                   type="number"
+                   name="photoCount"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> count</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="photoDescription"
+                    ngModel
+                    [disabled]="!editCounter.checked"
+          ></textarea>
+            <!--<mat-label> description</mat-label>-->
+          </mat-form-field>
+        </div>
+        <!--other-->
+        <div class="record-items">
+          <label>Other</label>
+          <mat-form-field>
+            <input matInput
+                   placeholder="count"
+                   type="number"
+                   name="otherCount"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> count</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="otherDescription"
+                    ngModel
+                    [disabled]="!editCounter.checked"
+          ></textarea>
+            <!--<mat-label> description</mat-label>-->
+          </mat-form-field>
+        </div>
+        <!--housing-->
+        <div class="record-items">
+          <label>Housing</label>
+          <mat-form-field>
+            <input matInput
+                   placeholder="count"
+                   type="number"
+                   name="housingCount"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> count</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="housingDescription"
+                    ngModel
+                    [disabled]="!editCounter.checked"
+          ></textarea>
+            <!--<mat-label> description</mat-label>-->
+          </mat-form-field>
+        </div>
+        <!--boxes-->
+        <div class="record-items">
+          <label>Boxes</label>
+          <mat-form-field>
+            <input matInput
+                   placeholder="count"
+                   type="number"
+                   name="boxesCount"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> count</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="boxesDescription"
+                    ngModel
+                    [disabled]="!editCounter.checked"
+          ></textarea>
+            <!--<mat-label> description</mat-label>-->
+          </mat-form-field>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="work-description-div">
+          <mat-form-field appearance="outline">
+            <textarea
+              name="fundMemo"
+              ngModel
+              matInput
+              placeholder="Work Description"></textarea>
+            <mat-label> Work Description</mat-label>
+          </mat-form-field>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <!--<mat-card class="osw-work-description">-->
+    <!--<mat-card-content >-->
+      <!--<mat-form-field appearance="outline">-->
+            <!--<textarea-->
+              <!--name="fundMemo"-->
+              <!--ngModel-->
+              <!--matInput-->
+              <!--placeholder="Work Description"></textarea>-->
+        <!--<mat-label> Work Description</mat-label>-->
+      <!--</mat-form-field>-->
+    <!--</mat-card-content>-->
+  <!--</mat-card>-->
+  <mat-card class="submit-mat-card mat-elevation-z10">
+    <button mat-raised-button color="accent" type="button" (click)="onClear(f)">Clear</button>
+    <button mat-raised-button color="primary" type="submit" >Save</button>
+  </mat-card>
+</form>

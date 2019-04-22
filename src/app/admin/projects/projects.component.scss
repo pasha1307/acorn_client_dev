@@ -1,0 +1,91 @@
+:host {
+  display: block;
+}
+mat-accordion {
+  padding: 5px;
+}
+mat-expansion-panel-header {
+  padding: 6px 15px;
+}
+.location-panel-header {
+  padding: 0 15px;
+  /*background-color: #fff;*/
+}
+.location-search {
+  width: 100%;
+  text-align: center;
+}
+.location-search > * {
+  max-width: 300px;
+}
+.location-create-new {
+  width: 100%;
+  background-color: rgba(125,125,125,.9);
+  text-align: center;
+  padding: 10px;
+}
+.location-create-new mat-expansion-panel {
+  width: 400px;
+  margin: 5px auto;
+}
+.list-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  width: 100%;
+  /*max-height: 80vh;*/
+  justify-content: center;
+  align-items: center;
+}
+.list-wrap > * {
+  margin-bottom: 5px;
+  max-width: 350px;
+}
+/*mat-expansion-panel {*/
+/*max-width: 300px;*/
+/*margin: 5px;*/
+/*}*/
+.location-create-new  mat-panel-title {
+  color: rgba(151,36,55,1);
+  text-transform: uppercase;
+}
+mat-form-field {
+  width: 100%;
+}
+mat-action-row {
+  /*background-color: pink;*/
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.list-form-location {
+  max-width: 230px;
+}
+
+.location-status-label {
+  padding-right: 70px;
+}
+.location-status-label.active {
+  font-style: italic;
+  color: green;
+}
+.location-status-label.inactive {
+  font-style: italic;
+  color: red;
+}
+.repo-status-label {
+  padding-right: 40px;
+}
+.repo-status-label.active {
+  font-style: italic;
+  color: green;
+}
+.repo-status-label.inactive {
+  font-style: italic;
+  color: red;
+}
+mat-slide-toggle {
+  /*background-color: green;*/
+  text-align: right;
+  width: 100%;
+  margin-bottom: 5px;
+}

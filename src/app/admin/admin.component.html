@@ -1,0 +1,94 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" #koo opened class="sidenav" >
+    <mat-tab-group>
+      <mat-tab label="Users" #users>
+        <ng-template matTabContent>
+          <div class="users-list">
+            <mat-list>
+              <h3 mat-subheader>Users</h3>
+              <mat-list-item *ngFor="let user of users$ | async" (click)="onSelect(user)">
+                <mat-icon mat-list-icon *ngIf="user.accessLevel === 'Admin'">supervisor_account</mat-icon>
+                <mat-icon mat-list-icon *ngIf="user.accessLevel === 'Curator'">account_box</mat-icon>
+                <mat-icon mat-list-icon *ngIf="user.accessLevel === 'Regular'">account_circle</mat-icon>
+                <mat-icon mat-list-icon *ngIf="user.accessLevel === 'Repository' || user.accessLevel === 'Repository Admin'">assignment_ind</mat-icon>
+                <h4 mat-line>{{user.sortName}}</h4>
+                <p mat-line> {{user.accessLevel}} </p>
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Lists" class="tab-lists" #lists>
+        <mat-menu>
+          <ng-template matTabContent>
+            <a mat-menu-item routerLink="people" routerLinkActive="active-link">People</a>
+            <a mat-menu-item routerLink="locations" routerLinkActive="active-link">Locations</a>
+            <a mat-menu-item routerLink="departments" routerLinkActive="active-link">Departments</a>
+            <a mat-menu-item routerLink="projects" routerLinkActive="active-link">Projects</a>
+            <a mat-menu-item routerLink="formats" routerLinkActive="active-link">Formats</a>
+            <a mat-menu-item routerLink="importance" routerLinkActive="active-link">Importance</a>
+            <a mat-menu-item routerLink="purposes" routerLinkActive="active-link">Purposes</a>
+            <a mat-menu-item routerLink="worktypes" routerLinkActive="active-link">Work Types</a>
+          </ng-template>
+        </mat-menu>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-sidenav>
+  <mat-sidenav-content class="sidenav-content">
+    <div *ngIf="lists.isActive">
+      <router-outlet></router-outlet>
+    </div>
+    <div *ngIf="users.isActive" >
+      <div *ngIf="selectedUser" class="admin-user-detail">
+        <div>
+          <button mat-icon-button color="warn" (click)="onCreate()">
+            <mat-icon>person_add</mat-icon><span>Add New User</span>
+          </button>
+        </div>
+        <mat-card class="admin-user-card">
+          <mat-card-header>
+            <div mat-card-avatar class="example-header-image">
+              <mat-icon *ngIf="selectedUser.accessLevel === 'Curator' || selectedUser.accessLevel === 'Admin' ">supervisor_account</mat-icon>
+              <mat-icon *ngIf="selectedUser.accessLevel === 'Regular'" >person</mat-icon>
+              <mat-icon *ngIf="selectedUser.accessLevel === 'Repository Admin' || selectedUser.accessLevel === 'Repository'">account_circle</mat-icon>
+              <mat-icon *ngIf="selectedUser.accessLevel === 'Repository'">assignment_ind</mat-icon>
+            </div>
+            <mat-card-title>{{selectedUser.sortName}} - {{selectedUser.accessLevel}}</mat-card-title>
+            <mat-card-subtitle *ngIf="selectedUser.location">	{{selectedUser.location.location}}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p *ngIf="selectedUser.username">Username: {{selectedUser.emailAddress}}</p>
+            <p *ngIf="selectedUser.emailAddress">Email: {{selectedUser.emailAddress}}</p>
+            <p *ngIf="selectedUser.userPassword">Password: {{selectedUser.userPassword}}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button (click)="onDelete(selectedUser.personId)">DELETE USER</button>
+            <button mat-button>EDIT</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+
+      <div *ngIf="!selectedUser" class="admin-user-detail">
+        <div>
+          <button mat-fab color="primary" (click)="onCreate()">
+            <mat-icon aria-label="Add new user">person_add</mat-icon>
+          </button>
+        </div>
+
+        <!--<button mat-icon-button color="primary"><mat-icon>person_add</mat-icon>Add New User</button>-->
+        <!--<h1>-->
+        <!--<mat-chip-list>-->
+        <!--<mat-chip color="primary" selected> <mat-icon>priority_high</mat-icon> Please, select User to see details</mat-chip>-->
+        <!--</mat-chip-list>-->
+        <!--</h1>-->
+
+<!--        <app-people></app-people>-->
+      </div>
+    </div>
+
+    <button mat-raised-button color="warn" class="showHideSide"  (click)="koo.opened = !koo.opened">
+      <span *ngIf="koo.opened">Hide Side</span>
+      <span *ngIf="!koo.opened">Show Side</span>
+    </button>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,43 @@
+mat-expansion-panel {
+  margin-bottom: 5px;
+  p {
+    margin: 0 0 5px 0;
+  };
+  span {
+    font-weight: 200;
+  }
+}
+.proposal-view-div {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  p {
+    line-height: 100%;
+  }
+  section {
+    flex:1;
+  }
+}
+.proposal-div {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  p {
+    line-height: 100%;
+  }
+  section {
+    flex:1;
+  }
+  table {
+    width: 100%;
+    font-size: 0.9em;
+    text-align: left;
+    line-height: 90%;
+    tr {
+      border-bottom: 2px solid black;
+    }
+  }
+}
+

@@ -1,0 +1,148 @@
+<div class="location-search">
+  <mat-form-field class="search-location-field">
+    <input
+      #searchIn
+      matInput
+      type="text"
+      name="searchLocations"
+      placeholder="Search projects.." [(ngModel)]="userFilter.projectName" >
+    <button *ngIf="searchIn.value" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="userFilter.projectName=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field></div>
+<div class="location-create-new">
+  <mat-expansion-panel #panelForm>
+    <mat-expansion-panel-header class="location-panel-header">
+      <mat-panel-title>
+        <span *ngIf="!projectName.value">
+          Create New Project
+        </span>
+        <span *ngIf="projectName.value">
+          {{projectName.value | uppercase}}
+        </span>
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form #f="ngForm" (ngSubmit)="onCreate(f)">
+      <div class="list-form-wrap">
+        <mat-form-field >
+                <textarea matInput
+                          #projectName
+                          name="projectName"
+                          ngModel
+                          placeholder="Project name"
+                          required
+                ></textarea>
+        </mat-form-field>
+        <mat-form-field >
+                <textarea matInput
+                          #projectDescription
+                          name="projectDescription"
+                          ngModel
+                          placeholder="Project description"
+                ></textarea>
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            name="startDate"
+            [matDatepicker]="projectStartDate"
+            [ngModel]="startDate"
+            placeholder="Start">
+          <mat-datepicker-toggle matSuffix [for]="projectStartDate"></mat-datepicker-toggle>
+          <mat-datepicker #projectStartDate></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input
+            matInput
+            name="endDate"
+            [matDatepicker]="projectEndDate"
+            [ngModel]="endDate"
+            placeholder="End">
+          <mat-datepicker-toggle matSuffix [for]="projectEndDate"></mat-datepicker-toggle>
+          <mat-datepicker #projectEndDate></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <mat-action-row>
+        <button mat-button color="basic" type="button" (click)="onCancel(f)">Cancel</button>
+        <button mat-button color="primary" type="submit">Save</button>
+
+      </mat-action-row>
+    </form>
+  </mat-expansion-panel>
+</div>
+<mat-divider></mat-divider>
+
+<div class="list-wrap">
+
+  <mat-accordion class="" *ngFor="let l of projects$ | async | filterBy: userFilter">
+    <mat-expansion-panel >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{l?.projectName}}
+        </mat-panel-title>
+        <mat-panel-description>
+          <!--{{l?.location['location']}}-->
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <form #lf="ngForm" (ngSubmit)="onUpdateProject(lf, l.projectId)">
+        <div class="list-form-wrap">
+          <mat-form-field >
+                <textarea matInput
+                          name="projectName"
+                          [ngModel]="l?.projectName"
+                          placeholder="Project name"
+                ></textarea>
+          </mat-form-field>
+          <mat-form-field >
+                <textarea matInput
+                          name="projectDescription"
+                          [ngModel]="l?.projectDescription"
+                          placeholder="Project description"
+                ></textarea>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              #pickerSD=ngModel
+              matInput
+              name="startDate"
+              [matDatepicker]="pickerSD"
+              [ngModel]="l?.startDate"
+              placeholder="Start">
+            <mat-datepicker-toggle matSuffix [for]="pickerSD"></mat-datepicker-toggle>
+            <mat-datepicker #pickerSD></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              #pickerED=ngModel
+              matInput
+              name="endDate"
+              [matDatepicker]="pickerED"
+              [ngModel]="l?.endDate"
+              placeholder="End">
+            <mat-datepicker-toggle matSuffix [for]="pickerED"></mat-datepicker-toggle>
+            <mat-datepicker #pickerED></mat-datepicker>
+          </mat-form-field>
+          <mat-slide-toggle class="list-form-location-status" labelPosition="before"
+                            #projectStatus name="inactive" [(ngModel)]="l.inactive" color="primary">
+            Current Status:
+            <span *ngIf="projectStatus.checked" class="location-status-label inactive">(Inactive)</span>
+            <span *ngIf="!projectStatus.checked" class="location-status-label active">(Active)</span>
+          </mat-slide-toggle>
+        </div>
+        <mat-action-row>
+          <button mat-button color="warn" type="button" (click)="onDelete(l.projectId)">
+            Delete
+            <!--<mat-icon>delete_outlined</mat-icon>-->
+          </button>
+          <button mat-button color="primary" type="submit">
+            Save
+            <!--<mat-icon>save</mat-icon>-->
+          </button>
+        </mat-action-row>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

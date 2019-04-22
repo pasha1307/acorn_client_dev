@@ -1,0 +1,80 @@
+<mat-expansion-panel>
+    <mat-expansion-panel-header class="panel-header-item">
+      <mat-panel-title>
+        Report#{{report?.reportId}} for
+        <span *ngIf="report?.Record"> - record #{{report?.Record?.recordId}}</span>
+        <span *ngIf="!report?.Record">
+        - item #{{report?.itemIdentification?.item?.itemId}}
+      </span>
+      </mat-panel-title>
+      <mat-panel-description *ngIf="report?.Record"> <p>
+        <span>{{report?.Record.title}}</span></p>
+      </mat-panel-description>
+      <mat-panel-description *ngIf="!report?.Record"> <p><span>{{report?.itemIdentification?.item?.authorArtist}}</span>
+        <span>{{report?.itemIdentification?.title}}</span></p>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+  <div id="print-section">
+    <section class="callnums-size-div">
+      <p *ngIf="report?.itemIdentification?.callNumbers">
+        Call Numbers:
+        <span *ngFor="let el of report.itemIdentification.callNumbers">{{el.callNumber}}</span>;
+      </p>
+      <p *ngIf="report?.height">Size:
+        <span>H = {{report?.height}}; W = {{report?.width}}; Th = {{report?.thickness}} </span>
+      </p>
+    </section>
+    <mat-divider></mat-divider>
+    <div class="report-view-div">
+      <section class="report-item-info-left">
+        <p>Work Location: <span>{{report?.workLocationId}} - {{report?.location?.location}}</span></p>
+        <div *ngIf="report?.itemIdentification?.workDoneBies.length">
+          Work Done By:
+          <p *ngFor="let el of report?.itemIdentification?.workDoneBies">
+            {{el.person.displayName}} (id: {{el.personId}} );
+            <span>{{el.completedHours}} hours spent; </span>
+            <span>Completed on {{el.dateCompleted | date}};</span>
+          </p>
+        </div>
+      </section>
+      <section class="report-item-info-right">
+        <div class="belongs-to-item item-counts" *ngIf="report.reportCounts.length > 0">
+          <fieldset>
+            <legend>Report Counts</legend>
+            <table>
+              <tr>
+                <th>Types</th>
+                <th>Count</th>
+                <th>Description</th>
+              </tr>
+              <tr *ngFor="let ct of report.reportCounts">
+                <td *ngIf="ct.countType">{{ct.countType}}</td>
+                <td *ngIf="ct.totalCount">{{ct.totalCount}}</td>
+                <td *ngIf="!ct.totalCount">--</td>
+                <td *ngIf="ct.description">{{ct.description}}</td>
+                <td *ngIf="!ct.description">--</td>
+              </tr>
+            </table>
+          </fieldset>
+        </div>
+      </section>
+    </div>
+    <mat-divider></mat-divider>
+    <p>Treatment: <span>{{report?.treatment}}</span></p>
+    <p>Preservation recommendations: <span>??</span></p>
+    <p>Summary: <span>{{report?.summary}}</span></p>
+  </div>
+  <mat-action-row>
+    <ng-content></ng-content>
+    <div>
+      <button
+        mat-button
+        [printStyle]="{p : {'font-weight': 400}, span : {'font-style': 'italic', 'color': 'green'}}"
+        [printTitle]="['Report To The Record', report?.reportId]"
+        printSectionId="print-section"
+        ngxPrint color="accent">Print</button>
+      <button mat-button [routerLink]="['/app/reports/',report?.reportId]" color="primary">Edit</button>
+    </div>
+  </mat-action-row>
+</mat-expansion-panel>
+

@@ -1,0 +1,135 @@
+<div class="location-search">
+  <mat-form-field class="search-location-field">
+    <input
+      #searchIn
+      matInput
+      type="text"
+      name="searchLocations"
+      placeholder=" search by locations.." [(ngModel)]="userFilter.location" >
+    <button *ngIf="searchIn.value" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="userFilter.location=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field></div>
+<div class="location-create-new">
+  <mat-expansion-panel #panelForm>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <span *ngIf="!locationName.value">
+          Add New Location
+        </span>
+        <span *ngIf="locationName.value">
+          {{locationName.value | uppercase}}
+        </span>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <form #f="ngForm" (ngSubmit)="onCreate(f)">
+      <div class="list-form-wrap">
+        <mat-form-field >
+                <textarea matInput
+                          #locationName
+                          name="locationName"
+                          ngModel
+                          placeholder="Location Name"
+                          required
+                ></textarea>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput
+                 #tub
+                 name="tub"
+                 ngModel
+                 placeholder="TUB"
+                 required
+          >
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput
+                 #shortName
+                 name="shortName"
+                 ngModel
+                 placeholder="Short Name"
+                 required
+          >
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput
+                 #acronym
+                 name="acronym"
+                 ngModel
+                 placeholder="Acronym"
+                 required
+          >
+        </mat-form-field>
+
+        <mat-slide-toggle
+          class="list-form-location-status"
+          #repoStatus name="isRepository"
+          [(ngModel)]="isRepository"
+          color="primary"
+          labelPosition="before">
+          Is it a Repository?
+          <span *ngIf="repoStatus.checked" class="repo-status-label active">Yes</span>
+          <span *ngIf="!repoStatus.checked" class="repo-status-label inactive">No</span>
+        </mat-slide-toggle>
+      </div>
+      <mat-action-row>
+        <button mat-button color="basic" type="button" (click)="onCancel(f)">Cancel</button>
+        <button mat-button color="primary" type="submit">Save</button>
+
+      </mat-action-row>
+    </form>
+  </mat-expansion-panel>
+</div>
+<mat-divider></mat-divider>
+<div class="list-wrap">
+
+  <mat-accordion class="locations-accordeon" *ngFor="let l of locations$| async| filterBy: userFilter">
+    <mat-expansion-panel >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{l?.location}}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{l?.tub}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <form #lf="ngForm" (ngSubmit)="onUpdateLocation(lf, l.locationId)">
+        <div class="list-form-wrap">
+          <mat-form-field >
+                <textarea matInput
+                          name="location"
+                          [ngModel]="l?.location"
+                          placeholder="Location Name"
+                ></textarea>
+          </mat-form-field>
+          <mat-slide-toggle class="list-form-location-status" labelPosition="before"
+                            #locationStatus name="inactive" [(ngModel)]="l.inactive" color="primary">
+            Current Status
+            <span *ngIf="locationStatus.checked" class="location-status-label inactive">(Inactive)</span>
+            <span *ngIf="!locationStatus.checked" class="location-status-label active">(Active)</span>
+          </mat-slide-toggle>
+          <mat-slide-toggle *ngIf="!l.inactive"
+                            class="list-form-location-status"
+                            #repoStatus name="isRepository"
+                            [(ngModel)]="l.isRepository"
+                            color="primary"
+                            labelPosition="before">
+            Repository Satus
+            <span *ngIf="repoStatus.checked" class="repo-status-label active">(Enabled)</span>
+            <span *ngIf="!repoStatus.checked" class="repo-status-label inactive">(Disabled)</span>
+          </mat-slide-toggle>
+        </div>
+        <mat-action-row>
+          <button mat-button color="warn" type="button" (click)="onDelete(l.locationId)">
+            Delete
+            <!--<mat-icon>delete_outlined</mat-icon>-->
+          </button>
+          <button mat-button color="primary" type="submit">
+            Save
+            <!--<mat-icon>save</mat-icon>-->
+          </button>
+        </mat-action-row>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

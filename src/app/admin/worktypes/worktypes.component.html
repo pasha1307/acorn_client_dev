@@ -1,0 +1,70 @@
+<div class="location-create-new">
+  <mat-expansion-panel #panelForm>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <span *ngIf="!workType.value">
+          add new work type
+        </span>
+        <span *ngIf="workType.value">
+          {{workType.value | uppercase}}
+        </span>
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form #f="ngForm" (ngSubmit)="onCreate(f)">
+      <div class="list-form-wrap">
+        <mat-form-field >
+                <textarea matInput
+                          #workType
+                          name ="workType"
+                          ngModel
+                          placeholder="Work type name"
+                          required
+                ></textarea>
+        </mat-form-field>
+      </div>
+      <mat-action-row>
+        <button mat-button color="basic" type="button" (click)="onCancel(f)">Cancel</button>
+        <button mat-button color="primary" type="submit">Save</button>
+      </mat-action-row>
+    </form>
+  </mat-expansion-panel>
+</div>
+<mat-divider></mat-divider>
+<div class="list-wrap">
+  <mat-expansion-panel *ngFor="let l of worktypes$ | async">
+    <mat-expansion-panel-header>
+      <mat-panel-title >
+        {{ l?.workType}}
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form #lf="ngForm" (ngSubmit)="onUpdateWorkType(lf, l.workTypeId)">
+      <div class="list-form-wrap">
+        <mat-form-field>
+          <input matInput
+                 name="workType"
+                 [ngModel]="l?.workType"
+                 placeholder="workType Name"
+          >
+        </mat-form-field>
+        <mat-slide-toggle class="list-form-location-status" labelPosition="before"
+                          #workTypeStatus name="workTypeInactive" [(ngModel)]="l.inactive" color="primary">
+          Current Status
+          <span *ngIf="workTypeStatus.checked" class="location-status-label inactive">(Inactive)</span>
+          <span *ngIf="!workTypeStatus.checked" class="location-status-label active">(Active)</span>
+        </mat-slide-toggle>
+      </div>
+      <mat-action-row>
+        <button mat-button color="warn" type="button" (click)="onDelete(l.workTypeId)">
+          Delete
+        </button>
+        <button mat-button color="primary" type="submit">
+          Save
+        </button>
+      </mat-action-row>
+    </form>
+  </mat-expansion-panel>
+</div>

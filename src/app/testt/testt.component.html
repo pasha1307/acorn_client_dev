@@ -1,0 +1,168 @@
+<form autocomplete="off" [formGroup]="propForm" (ngSubmit)="onSave()">
+<div fxLayout="column" fxFlexAlign="center" fxLayoutGap="10px" class="proposal-wrap-div">
+  <!--SECTION 1-->
+  <section fxLayout="row wrap" fxFlexAlign="center" fxLayoutGap="5px">
+    <mat-card>
+      <mat-card-content>
+        <!--Proposed By-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #pa
+            formControlName="proposedBy"
+            multiple>
+            <mat-option *ngFor="let prs of coordinators | orderBy: order"
+                        [value]="prs.personId">{{prs.sortName}}</mat-option>
+          </mat-select>
+          <mat-label>Proposed By: {{pa.value}} </mat-label>
+        </mat-form-field>
+        <!--Proposal Date-->
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            formControlName="proposalDate"
+            [matDatepicker]="picker"
+            placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <label>Proposal Date</label>
+        </mat-form-field>
+        <!--Proposed Hours-->
+        <mat-form-field >
+          <input
+            matInput
+            formControlName="minimumProposedHours"
+            type="number">
+          <mat-label>Proposed Hours: Min</mat-label>
+        </mat-form-field>
+        <mat-form-field >
+          <input
+            matInput
+            formControlName="maximumProposedHours"
+            type="number">
+          <mat-label>Max:</mat-label>
+        </mat-form-field>
+        <!--Exam Date-->
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            formControlName="examDate"
+            [matDatepicker]="exam"
+            [ngModel]="exam"
+            placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="exam"></mat-datepicker-toggle>
+          <mat-datepicker #exam></mat-datepicker>
+          <label>Exam Date</label>
+        </mat-form-field>
+        <!--Exam Location-->
+        <mat-form-field>
+          <mat-select
+            #examLocation
+            formControlName="examLocationId"
+            required>
+            <mat-option
+              *ngFor="let rp of locations[0].Locations"
+              [value]="rp.locationId">
+              {{rp.location}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Exam Location {{examLocation.value}}</mat-label>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-content>
+        <fieldset>
+          <legend>Dimensions</legend>
+          <mat-form-field >
+            <mat-select
+              #unit
+              formControlName="dimensionUnit"
+            >
+              <mat-option value="in">Inches</mat-option>
+              <mat-option value="cm" >Cm</mat-option>
+            </mat-select>
+            <mat-label>Unit {{unit.value}}</mat-label>
+          </mat-form-field>
+          <mat-form-field >
+            <input
+              matInput
+              formControlName="height"
+              placeholder="Height"
+              type="number"
+            >
+            <mat-label> Height</mat-label>
+            <span matSuffix>.00</span>
+          </mat-form-field>
+          <mat-form-field >
+            <input
+              matInput
+              formControlName="width"
+              placeholder="Width"
+              type="number"
+            >
+            <mat-label>Width</mat-label>
+            <span matSuffix>.00</span>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              formControlName="thickness"
+              placeholder="Thickness"
+              type="number"
+            >
+            <mat-label> Thickness</mat-label>
+            <span matSuffix>.00</span>
+          </mat-form-field>
+        </fieldset>
+
+      </mat-card-content>
+    </mat-card>
+  </section>
+  <!--SECTION 3-->
+  <section fxLayout="row wrap" fxFlexAlign="center" fxLayoutGap="5px">
+    <mat-card>
+      <mat-card-content>
+        <mat-form-field appearance="outline">
+            <textarea
+              formControlName="description"
+              matInput
+              placeholder="Description of the bound manuscript"></textarea>
+          <mat-label> Description</mat-label>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-content>
+        <mat-form-field appearance="outline">
+            <textarea
+             formControlName="condition"
+              matInput
+              placeholder="Conditions of the bound manuscript"></textarea>
+          <mat-label> Condition</mat-label>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-card-content>
+        <mat-form-field appearance="outline">
+            <textarea
+              formControlName="treatment"
+              matInput
+              placeholder="proposed treatment"></textarea>
+          <mat-label>Treatment</mat-label>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  </section>
+  <!--SECTION 4-->
+  <!--SECTION-BUTTONS-->
+  <section>
+    <mat-card class="proposal-buttons-mat-card" fxLayout="row wrap">
+      <button mat-flat-button type="submit">Save</button>
+      <button mat-flat-button>Clear Changes</button>
+      <button mat-flat-button>Email Proposal</button>
+      <button mat-flat-button>View Proposal Approval</button>
+    </mat-card>
+  </section>
+</div>
+</form>

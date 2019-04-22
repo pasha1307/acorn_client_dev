@@ -1,0 +1,157 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Email
+    </mat-panel-title>
+    <mat-panel-description *ngIf="tosubmit">
+      proposal - {{p?.proposalId}};
+    </mat-panel-description>
+    <mat-panel-description  *ngIf="p.proposalApprovalHistories.length && !tosubmit">
+      {{p?.proposalApprovalHistories[0]?.activityType}}
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f, p)">
+    <div class="email-wrap-div">
+      <section class="section-email">
+        <ng-container *ngIf="tosubmit">
+          <mat-form-field>
+            <input
+              #eFrom
+              matInput
+              name="emailFrom"
+              [ngModel]="p?.itemIdentification?.item?.person?.EmailAddress"
+              type="email"
+            >
+            <mat-label> From: {{eFrom.value}}</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              name="emailTo"
+              [ngModel]="p?.itemIdentification.ItemCuratorPlus.EmailAddress"
+              type="email">
+          </mat-form-field>
+        </ng-container>
+       <ng-container *ngIf="!tosubmit">
+         <mat-form-field>
+           <input
+             matInput
+             name="emailFrom"
+             [ngModel]="p?.itemIdentification.ItemCuratorPlus.EmailAddress"
+             type="email"
+           >
+         </mat-form-field>
+         <mat-form-field>
+           <input
+             matInput
+             name="emailTo"
+             [ngModel]="p?.itemIdentification?.item?.person?.EmailAddress"
+             type="email"
+           >
+           <mat-label> To: {{p?.itemIdentification.ItemCuratorPlus.EmailAddress}}</mat-label>
+         </mat-form-field>
+       </ng-container>
+
+        <mat-form-field>
+          <mat-select
+            #eCC
+            name="emailCC"
+            [ngModel]="p?.itemIdentification.ItemCurator.EmailAddress"
+          >
+            <mat-option *ngFor="let p of curators | orderBy: order"
+                        [value]="p.emailAddress">{{p.sortName}}</mat-option>
+          </mat-select>
+          <mat-label>CC: {{p?.itemIdentification.ItemCurator.EmailAddress}} </mat-label>
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            name="emailSubject"
+            ngModel
+            placeholder="Submit for Approval"
+          >
+          <mat-label>Subject </mat-label>
+        </mat-form-field>
+      </section>
+      <section class="section-comment">
+        <mat-form-field appearance="outline" class="proposal-email-comment-field">
+          <textarea matInput
+                    placeholder="comments"
+                    name="emailComment"
+                    ngModel
+          ></textarea>
+        </mat-form-field>
+      </section>
+    </div>
+    <mat-action-row *ngIf="tosubmit">
+      <button mat-button color="primary" type="submit">Submit Test for Approval</button>
+    </mat-action-row>
+  </form>
+  <mat-action-row *ngIf="!tosubmit">
+    <button mat-button color="primary" (click)="onApprove(f,p)">Approve</button>
+    <button mat-button color="primary" (click)="onDeny(f,p)">Reject</button>
+  </mat-action-row>
+</mat-expansion-panel>
+
+<!--<mat-expansion-panel>-->
+  <!--<mat-expansion-panel-header>-->
+    <!--<mat-panel-title>-->
+      <!--Email-->
+    <!--</mat-panel-title>-->
+    <!--<mat-panel-description>-->
+      <!--From: {{eFrom.value}}; proposal -{{prs?.proposalId}};-->
+    <!--</mat-panel-description>-->
+  <!--</mat-expansion-panel-header>-->
+  <!--<div class="email-wrap-div">-->
+    <!--<section class="section-email">-->
+      <!--<mat-form-field>-->
+        <!--<input-->
+          <!--#eFrom-->
+          <!--matInput-->
+          <!--[formControl]="emailFrom"-->
+          <!--[value]="prs?.itemIdentification?.item?.person?.EmailAddress"-->
+          <!--type="email"-->
+        <!--&gt;-->
+        <!--<mat-label> From: {{eFrom.value}}</mat-label>-->
+      <!--</mat-form-field>-->
+      <!--<mat-form-field >-->
+        <!--<mat-select-->
+          <!--#eTo-->
+          <!--[value]="prs?.itemIdentification.ItemCuratorPlus.EmailAddress"-->
+          <!--[formControl]="emailTo">-->
+          <!--<mat-option *ngFor="let p of curators | orderBy: order"-->
+                      <!--[value]="p.emailAddress">{{p.sortName}}</mat-option>-->
+        <!--</mat-select>-->
+        <!--<mat-label>To: {{eTo.value}}  </mat-label>-->
+      <!--</mat-form-field>-->
+      <!--<mat-form-field>-->
+        <!--<mat-select-->
+          <!--#eCC-->
+          <!--[value]="prs?.itemIdentification.ItemCurator.EmailAddress"-->
+          <!--[formControl]="emailCC">-->
+          <!--<mat-option *ngFor="let p of curators | orderBy: order"-->
+                      <!--[value]="p.emailAddress">{{p.sortName}}</mat-option>-->
+        <!--</mat-select>-->
+        <!--<mat-label>CC: {{eCC.value}} </mat-label>-->
+      <!--</mat-form-field>-->
+      <!--<mat-form-field>-->
+        <!--<input-->
+          <!--matInput-->
+          <!--[formControl]="emailSubject"-->
+        <!--&gt;-->
+        <!--<mat-label>Subject</mat-label>-->
+      <!--</mat-form-field>-->
+    <!--</section>-->
+    <!--<section class="section-comment">-->
+      <!--<mat-form-field appearance="outline" class="proposal-email-comment-field">-->
+          <!--<textarea matInput-->
+                    <!--placeholder="comments"-->
+                    <!--[formControl]="emailComment"-->
+          <!--&gt;</textarea>-->
+      <!--</mat-form-field>-->
+    <!--</section>-->
+  <!--</div>-->
+  <!--<mat-action-row *ngIf="poo">-->
+    <!--<button mat-button color="primary" (click)="onSaveEmail()">Confirm Test</button>-->
+  <!--</mat-action-row>-->
+<!--</mat-expansion-panel>-->

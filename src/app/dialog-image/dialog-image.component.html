@@ -1,0 +1,22 @@
+<div class="dialog-header-wrap">
+  <h3 mat-dialog-title>#{{data.image.fileId}} - {{data.image.fileName | uppercase}}
+    <span class="img-subtitle-dialog"> {{data.image.dateEntered | date}} by {{data.image.person.displayName}}</span>
+  </h3>
+  <button mat-icon-button
+          [mat-dialog-close]="true"
+          color="primary"
+          class="dialog-close-btn"
+          matTooltip="Close image"
+          matTooltipPosition="above"
+          matTooltipClass="tooltip-zoom-info"
+  >
+    <mat-icon>clear</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <img [src]="data.image.path" alt="">
+</mat-dialog-content>
+<mat-dialog-actions>
+  <p mat-line>{{data.image.description}}</p>
+</mat-dialog-actions>

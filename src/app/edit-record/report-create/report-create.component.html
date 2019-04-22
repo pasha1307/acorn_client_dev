@@ -1,0 +1,352 @@
+<!--'Dependency','Treatment','Description','Condition','Preservation','ProposedTreatment'-->
+<div class="cards-wrapper">
+  <form #f="ngForm" (ngSubmit)="onSave(f)">
+    <!--COLUMN ONE-->
+    <mat-card class="card-column-one">
+      <!--Report Date-->
+      <mat-form-field appearance="outline">
+        <input
+          #reportDate
+          matInput
+          name="reportDate"
+          [ngModel]="currTime"
+          [matDatepicker]="picker"
+          placeholder="Choose a date"
+          required
+        >
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <label>Report Date {{currTime | date}}</label>
+      </mat-form-field>
+      <!--Report By-->
+      <mat-form-field>
+        <mat-label>Report By</mat-label>
+        <mat-select
+          #reportBy
+          placeholder="Name"
+          name="reportById"
+          [ngModel]="record?.coordinatorId"
+          required
+        >
+          <mat-option *ngFor="let c of coordinators | orderBy: order"
+                      [value]="c.personId">{{c.sortName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <!--Work Location goes to ItemReport table-->
+      <mat-form-field appearance="outline">
+        <mat-select
+          #workLocation
+          name="workLocationId"
+          [ngModel]="record?.homeLocationId"
+          required>
+          <mat-option
+            *ngFor="let rp of locations[0].Locations"
+            [value]="rp.locationId">
+            {{rp.location}}
+          </mat-option>
+        </mat-select>
+        <mat-label> Work Location {{workLocation.value}}</mat-label>
+      </mat-form-field>
+      <!--formatId-->
+      <mat-form-field appearance="outline">
+        <mat-select
+          #recordFormat=ngModel
+          name="formatId"
+          [ngModel]="record?.formatId"
+          required>
+          <mat-option *ngFor="let fm of formats[0].Formats" [value]="fm.formatId">
+            {{fm.format}}
+          </mat-option>
+        </mat-select>
+        <mat-label>Format: {{recordFormat.value}}</mat-label>
+      </mat-form-field>
+      <!--importance-->
+      <mat-form-field appearance="outline">
+        <mat-select
+          #imp
+          name="importanceId"
+          ngModel
+          required>
+          <mat-option *ngFor="let el of importance[0].Importance" [value]="el.importanceId">
+            {{el.importance}}
+          </mat-option>
+        </mat-select>
+        <mat-label>Importance {{imp.value}} </mat-label>
+      </mat-form-field>
+    </mat-card>
+    <!--COLUMN TWO-->
+    <mat-card class="card-column-two">
+      <mat-card-content>
+        <fieldset>
+          <legend>Dimensions</legend>
+          <mat-form-field>
+            <mat-select
+              #unit
+              value="in"
+              name="dimensionUnit"
+              ngModel
+            >
+              <mat-option value="in">Inches</mat-option>
+              <mat-option value="cm">Cm</mat-option>
+            </mat-select>
+            <mat-label>Unit: ({{unit.value}})</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              #height
+              matInput
+              name="height"
+              ngModel
+              placeholder="Height"
+              type="number"
+            >
+            <mat-label> Height</mat-label>
+            <span matSuffix>.00</span>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              #width
+              matInput
+              name="width"
+              ngModel
+              placeholder="Width"
+              type="number"
+            >
+            <mat-label>Width</mat-label>
+            <span matSuffix>.00</span>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              #thick
+              matInput
+              name="thickness"
+              ngModel
+              placeholder="Thickness"
+              type="number"
+            >
+            <mat-label> Thickness</mat-label>
+            <span matSuffix>.00</span>
+          </mat-form-field>
+        </fieldset>
+        <mat-form-field>
+          <input matInput
+                 placeholder="hours"
+                 type="number"
+                 name="actualCount"
+                 ngModel
+          >
+          <mat-label> Actual Hours</mat-label>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+    <!--COL THREE-->
+    <mat-card class="card-column-three">
+      <mat-card-content>
+        <fieldset>
+          <legend>Item Count*</legend>
+          <!--volumes-->
+          <div class="record-items">
+            <label mat-line>Volumes</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="volumeCount"
+                     [ngModel]="record?.itemIdentification?.item?.initialCounts[0]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+
+            <mat-form-field>
+              <textarea matInput
+                placeholder="description"
+                name="volumeDescription"
+                [ngModel]="record?.itemIdentification?.item?.initialCounts[0]?.description"
+              ></textarea>
+            </mat-form-field>
+          </div>
+          <!--sheets-->
+          <div class="record-items">
+            <label>Sheets</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="sheetCount"
+                     [ngModel]="record?.itemIdentification?.item?.initialCounts[1]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput
+                     placeholder="description"
+                     name="sheetDescription"
+                     [ngModel]="record?.itemIdentification?.item?.initialCounts[1]?.description"
+              >
+              <mat-label> description</mat-label>
+            </mat-form-field>
+          </div>
+          <!--photos-->
+          <div class="record-items">
+            <label>Photos</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="photoCount"
+                     [ngModel]="record?.itemIdentification?.item?.initialCounts[2]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+<textarea matInput
+          placeholder="description"
+          name="photoDescription"
+          [ngModel]="record?.itemIdentification?.item?.initialCounts[2]?.description"
+></textarea>
+              <!--<mat-label> description</mat-label>-->
+            </mat-form-field>
+          </div>
+          <!--other-->
+          <div class="record-items">
+            <label>Other</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="otherCount"
+                     [ngModel]="record?.itemIdentification?.item?.initialCounts[3]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+<textarea matInput
+          placeholder="description"
+          name="otherDescription"
+          [ngModel]="record?.itemIdentification?.item?.initialCounts[3]?.description"
+></textarea>
+            </mat-form-field>
+          </div>
+          <!--housing-->
+          <div class="record-items">
+            <label>Housing</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="housingCount"
+                     [ngModel]="record?.itemIdentification?.item?.initialCounts[4]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+<textarea matInput
+          placeholder="description"
+          name="housingDescription"
+          [ngModel]="record?.itemIdentification?.item?.initialCounts[4]?.description"
+></textarea>
+              <!--<mat-label> description</mat-label>-->
+            </mat-form-field>
+          </div>
+          <!--boxes-->
+          <div class="record-items">
+            <label>Boxes</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="boxesCount"
+                     [ngModel]="record?.itemIdentification?.item?.initialCounts[5]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+<textarea matInput
+          placeholder="description"
+          name="boxesDescription"
+          [ngModel]="record?.itemIdentification?.item?.initialCounts[5]?.description"
+></textarea>
+              <!--<mat-label> description</mat-label>-->
+            </mat-form-field>
+          </div>
+        </fieldset>
+
+      </mat-card-content>
+    </mat-card>
+    <!--COL FOUR-->
+    <mat-card class="card-column-four">
+      <mat-card-content>
+        <!--AutoText-->
+        <ng-container>
+          <mat-form-field *ngIf="onAuto(record?.coordinatorId)">
+            <mat-select
+              #autoTreat=ngModel
+              name="autotext"
+              multiple
+              ngModel>
+              <mat-option
+                *ngFor="let rp of onAuto(record?.coordinatorId)" [value]="rp.autotext">
+                {{rp.autotext}}
+              </mat-option>
+            </mat-select>
+            <mat-label> Select treatment {{autoTreat.value}}</mat-label>
+          </mat-form-field>
+        </ng-container>
+        <mat-form-field appearance="outline" class="report-treatment-ta">
+            <textarea
+              matInput
+              name="treatment"
+              [value]="autoTreat?.value"
+              [ngModel]="record?.itemProposal?.treatment"
+              placeholder="Treatment"></textarea>
+          <mat-label> Treatment</mat-label>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="report-recommendation-ta">
+            <textarea
+              name="preservationRecommendations"
+              ngModel
+              matInput
+              placeholder="Preservation Recommendations"></textarea>
+          <mat-label> Recommendations</mat-label>
+        </mat-form-field>
+        <mat-form-field class="report-summary-ta" appearance="outline">
+          <mat-label> Summary</mat-label>
+          <textarea
+            matInput
+            name="summary"
+            ngModel
+            placeholder="Summary"></textarea>
+        </mat-form-field>
+        <mat-divider></mat-divider>
+        <div class="report-checkboxes-div">
+          <mat-checkbox
+            name="adminOnly"
+            [ngModel]="0"
+          >Admin only
+          </mat-checkbox>
+          <mat-checkbox
+            name="examOnly"
+            [ngModel]="0"
+          >Exam only
+          </mat-checkbox>
+          <mat-checkbox
+            name="customHousingOnly"
+            [ngModel]="0"
+          >Custom housing only
+          </mat-checkbox>
+          <mat-checkbox
+            name="additionalMaterialsOnFile"
+            [ngModel]="0"
+          >Additional materials on file
+          </mat-checkbox>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </form>
+</div>
+<ng-content></ng-content>
+<mat-card class="submit-mat-card mat-elevation-z10">
+  <button mat-raised-button color="accent" type="button" (click)="onClear(f)">Cancel</button>
+  <button mat-raised-button color="primary" type="submit" (click)="onSave(f)">Save Report</button>
+</mat-card>
+

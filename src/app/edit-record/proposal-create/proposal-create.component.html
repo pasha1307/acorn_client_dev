@@ -1,0 +1,242 @@
+<div class="proposal-wrap">
+  <section>
+    <form autocomplete="off" [formGroup]="propForm" (ngSubmit)="onSave()" fxLayout>
+      <mat-card class="proposal-card-column-one">
+        <mat-card-content>
+          <!--Proposed By-->
+          <mat-form-field appearance="outline">
+            <mat-select
+              #pa
+              formControlName="proposedBy"
+              multiple>
+              <mat-option *ngFor="let prs of coordinators | orderBy: order"
+                          [value]="prs.personId">{{prs.sortName}}</mat-option>
+            </mat-select>
+            <mat-label>Proposed By: {{pa.value}} </mat-label>
+          </mat-form-field>
+          <!--Proposal Date-->
+          <mat-form-field appearance="outline">
+            <input
+              #propDate
+              matInput
+              formControlName="proposalDate"
+              [matDatepicker]="picker"
+              placeholder="Choose a date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <label>Proposal Date</label>
+          </mat-form-field>
+          <!--Proposed Hours-->
+          <fieldset class="proposed-hours">
+            <legend>Proposed Hours</legend>
+            <mat-form-field >
+              <input
+                #min
+                matInput
+                formControlName="minimumProposedHours"
+                type="number">
+              <mat-label>Min</mat-label>
+            </mat-form-field>
+            <mat-form-field >
+              <input
+                #max
+                matInput
+                formControlName="maximumProposedHours"
+                type="number">
+              <mat-label>Max:</mat-label>
+            </mat-form-field>
+          </fieldset>
+          <fieldset>
+            <legend>Dimensions</legend>
+            <mat-form-field >
+              <mat-select
+                #unit
+                formControlName="dimensionUnit"
+              >
+                <mat-option value="in">Inches</mat-option>
+                <mat-option value="cm" >Cm</mat-option>
+              </mat-select>
+              <mat-label>Unit {{unit.value}}</mat-label>
+            </mat-form-field>
+            <mat-form-field >
+              <input
+                #height
+                matInput
+                formControlName="height"
+                placeholder="Height"
+                type="number"
+              >
+              <mat-label> Height</mat-label>
+              <span matSuffix>.00</span>
+            </mat-form-field>
+            <mat-form-field >
+              <input
+                #width
+                matInput
+                formControlName="width"
+                placeholder="Width"
+                type="number"
+              >
+              <mat-label>Width</mat-label>
+              <span matSuffix>.00</span>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                #thick
+                matInput
+                formControlName="thickness"
+                placeholder="Thickness"
+                type="number"
+              >
+              <mat-label> Thickness</mat-label>
+              <span matSuffix>.00</span>
+            </mat-form-field>
+          </fieldset>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="proposal-card-column-two">
+        <mat-card-content fxLayout="column" fxFlexAlign="center" fxLayoutGap="10px">
+          <!--Exam Location-->
+          <mat-form-field appearance="outline">
+            <mat-select
+              #examLocation
+              formControlName="examLocationId"
+              required>
+              <mat-option
+                *ngFor="let rp of locations[0].Locations"
+                [value]="rp.locationId">
+                {{rp.location}}
+              </mat-option>
+            </mat-select>
+            <mat-label> Exam Location {{examLocation.value}}</mat-label>
+          </mat-form-field>
+          <!--Exam Date-->
+          <mat-form-field appearance="outline">
+            <input
+              #exam
+              matInput
+              formControlName="examDate"
+              [matDatepicker]="exam"
+              placeholder="select..">
+            <mat-datepicker-toggle matSuffix [for]="exam"></mat-datepicker-toggle>
+            <mat-datepicker #exam></mat-datepicker>
+            <label>Exam Date</label>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <textarea
+              #description
+              formControlName="description"
+              matInput
+              placeholder="Description of the bound manuscript"></textarea>
+            <mat-label> Description</mat-label>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <textarea
+              #condition
+              formControlName="condition"
+              matInput
+              placeholder="Conditions of the bound manuscript"></textarea>
+            <mat-label> Condition</mat-label>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <textarea
+              #treatment
+              formControlName="treatment"
+              matInput
+              placeholder="proposed treatment"></textarea>
+            <mat-label>Treatment</mat-label>
+          </mat-form-field>
+        </mat-card-content>
+        <mat-divider></mat-divider>
+        <mat-action-row>
+          <button mat-flat-button type="submit" color="primary">Save</button>
+        </mat-action-row>
+      </mat-card>
+    </form>
+  </section>
+  <section class="proposal-view-section">
+    <mat-card class="proposal-view-card">
+      <mat-card-title>
+       Proposal to the Record #{{record?.recordId}}
+      </mat-card-title>
+      <mat-card-content id="print-section">
+        <p *ngIf="examLocation.selected?.viewValue">Repository: <span>{{examLocation.selected?.viewValue}}</span></p>
+        <p>Curator: <span>{{record?.Curator.DisplayName}}</span></p>
+        <p>Project: <span>{{record?.project.ProjectName}}</span></p>
+        <p>Group: <span>{{record?.group.GroupName}}</span></p>
+        <p>Coordinator: <span>{{record?.Coordinator.DisplayName}}</span></p>
+        <p>Proposed Treatment: <span>{{treatment.value}}</span></p>
+        <p *ngIf="record?.itemIdentification?.callNumbers">Call Numbers: <span *ngFor="let el of record?.itemIdentification?.callNumbers">{{el.callNumber}}</span></p>
+        <p>Author/Artist: <span>{{record?.authorArtist}}</span></p>
+        <p>Title: <span>{{record?.itemIdentification?.title}}</span></p>
+        <p>Date Of Object: <span>{{record?.dateOfObject}}</span></p>
+        <p *ngIf="height.value">Size: <span>h={{height.value}}; w={{width.value}}; th={{thick.value}} </span></p>
+        <p>Proposed By: <span *ngFor="let n of pa.selected">
+          {{n.viewValue}}
+        </span></p>
+        <p *ngIf="min.value">Proposed hours: <span>{{min.value}} - {{max.value}}</span></p>
+        <p>Notification To: <span>{{record?.CuratorPlus.EmailAddress}}</span></p>
+        <p>Notification CC: <span>{{record?.Curator.EmailAddress}}</span></p>
+      </mat-card-content>
+      <mat-action-row>
+        <button mat-flat-button (click)="showEmail = true">Email</button>
+        <button
+          mat-flat-button
+          [printStyle]="{p : {'font-weight': 400}, span : {'font-style': 'italic', 'color': 'green'}}"
+          [printTitle]="['Proposal To The Record', record?.recordId]"
+          printSectionId="print-section"
+          ngxPrint>Print</button>
+      </mat-action-row>
+      <!--EMAIL BLOCK-->
+    </mat-card>
+      <mat-expansion-panel *ngIf="showEmail" class="proposal-expansion-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Email:
+          </mat-panel-title>
+          <mat-panel-description>
+           from: {{record?.Coordinator.EmailAddress}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <!--<div class="proposal-email">-->
+        <mat-form-field>
+          <input
+            matInput
+            [formControl]="emailFrom"
+            type="email"
+          >
+          <mat-label> From: {{record?.Coordinator.EmailAddress}}</mat-label>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-select
+            #eTo
+            [value]="record?.CuratorPlus.EmailAddress"
+            [formControl]="emailTo">
+            <mat-option *ngFor="let p of curators | orderBy: order"
+                        [value]="p.emailAddress">{{p.sortName}}</mat-option>
+          </mat-select>
+          <mat-label>To: {{eTo.value}}  </mat-label>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-select
+            #eCC
+            [value]="record?.Curator.EmailAddress"
+            [formControl]="emailCC">
+            <mat-option *ngFor="let p of curators | orderBy: order"
+                        [value]="p.emailAddress">{{p.sortName}}</mat-option>
+          </mat-select>
+          <mat-label>CC: {{eCC.value}} </mat-label>
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            [formControl]="emailSubject"
+          >
+          <mat-label>Subject</mat-label>
+        </mat-form-field>
+        <mat-action-row>
+          <button mat-button color="primary">Send</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+  </section>
+</div>

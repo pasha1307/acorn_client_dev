@@ -1,0 +1,526 @@
+<form #f="ngForm" (ngSubmit)="onSaveRecord(f)">
+  <mat-card class="card-record-title">
+    <mat-card-header>
+      <div class="group-card-header">
+        <h2 class="group-title">Group: </h2>
+        <mat-form-field class="group-name-field">
+          <input
+            #gName
+            matInput
+            placeholder = "Group Name"
+            name="groupName"
+            [ngModel]="baseName"
+            [value]="baseName"
+            required >
+        </mat-form-field>
+        <mat-form-field class="record-title-field">
+          <input
+            #rTitle
+            matInput
+            placeholder = "Record Title"
+            name="recordTitle"
+            ngModel
+            required >
+          <mat-label>Record Title</mat-label>
+        </mat-form-field>
+        <mat-form-field class="record-type-field">
+          <mat-select
+            name="recordType"
+            placeholder="Type"
+            ngModel
+            required>
+            <mat-option value="Item">Item</mat-option>
+            <mat-option value="OSW">OSW</mat-option>
+          </mat-select>
+          <!--<mat-label>Type</mat-label>-->
+        </mat-form-field>
+      </div>
+      <div class="numbers-card-header">
+        <mat-form-field class="number-records-field">
+          <input
+            matInput
+            type="number"
+            placeholder="No. of Records"
+            name="recordsLength"
+            ngModel
+            required >
+          <mat-label>Number of New Records</mat-label>
+        </mat-form-field>
+      </div>
+
+    </mat-card-header>
+  </mat-card>
+  <!--BLOCK1 1 - original LEFT UP -->
+  <div class="cards-wrapper">
+    <mat-card class="card-column-one">
+      <mat-card-content>
+        <!--projectId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #project
+            name="projectId"
+            ngModel
+            [value]="project.value"
+          >
+            <mat-option *ngFor="let p of projects[0].Projects" [value]="p.projectId">{{p.projectName}}</mat-option>
+          </mat-select>
+          <mat-label> Project {{project.value}}</mat-label>
+        </mat-form-field>
+        <!--Coordinator Id-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #coordinator
+            name="coordinatorId"
+            ngModel
+            required>
+            <mat-option *ngFor="let p of coordinators | orderBy: order" [value]="p.personId"> {{p.sortName}}</mat-option>
+          </mat-select>
+          <mat-label>Coordinator {{coordinator.value}}</mat-label>
+        </mat-form-field>
+        <!--Work Assigned - Multiple Select-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #pa
+            [formControl]="assignedTo"
+            [(value)]="workAssignedToIds"
+            multiple>
+            <mat-option *ngFor="let prs of assignees | orderBy: order"
+                        [value]="prs.personId">{{prs.sortName}}</mat-option>
+          </mat-select>
+          <mat-label>Work Assigned To: {{pa.value}}</mat-label>
+        </mat-form-field>
+        <!--call numbers-->
+        <ng-container class="call-numbers-container">
+          <mat-form-field appearance="outline">
+              <input matInput
+                     placeholder="Call Number Base"
+                     name="callNumberBase"
+                     ngModel >
+            <mat-label>Call Number Base</mat-label>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+          <input matInput
+                 type="number"
+                 placeholder="From"
+                 name="callNumberFrom"
+                 ngModel >
+            <mat-label>Call Nums. Range: From</mat-label>
+        </mat-form-field>
+          <mat-form-field appearance="outline">
+            <input matInput
+                   type="number"
+                   placeholder="To"
+                   name="callNumberTo"
+                   ngModel >
+          </mat-form-field>
+        </ng-container>
+        <!--CHARGE To..-->
+        <div class="chargeto-container">
+          <mat-card-content>
+            <mat-radio-group
+              class="chargetype-radio-group"
+              name="chargeToType"
+              [(ngModel)]="typeValue">
+              <mat-radio-button
+                value="patron" color="accent"
+                labelPosition="after">
+                Patron
+              </mat-radio-button>
+              <mat-radio-button
+                #chargeType
+                value="project" color="accent"
+                labelPosition="after">
+                Project
+              </mat-radio-button>
+              <mat-radio-button
+                value="repo" color="accent"
+                labelPosition="after">
+                Repository
+              </mat-radio-button>
+            </mat-radio-group>
+          </mat-card-content>
+          <!--chargeToId Input-->
+          <mat-form-field appearance="outline" class="chargeto-field">
+            <mat-select
+              [disabled]="!typeValue"
+              name="chargeToId"
+              #chargeToId
+              [value]="chargeToId.value"
+              ngModel
+              required>
+              <ng-container>
+                <mat-optgroup label="Patrons" *ngIf="typeValue === 'patron'">
+                  <mat-option  *ngFor="let pt of typePatrons"
+                               [value]="pt.ChargeToID">
+                    {{pt.ChargeToName}}
+                  </mat-option>
+                </mat-optgroup>
+              </ng-container>
+              <ng-container>
+                <mat-optgroup label="Projects" *ngIf="typeValue === 'project'">
+                  <mat-option
+                    [value]="pr.ChargeToID"
+                    *ngFor="let pr of typeProjects">
+                    {{pr.ChargeToName}}
+                  </mat-option>
+                </mat-optgroup>
+              </ng-container>
+              <ng-container>
+                <mat-optgroup label="Repositories" *ngIf="typeValue === 'repo'">
+                  <mat-option
+                    [value]="rp.ChargeToID"
+                    *ngFor="let rp of typeRepos">
+                    {{rp.ChargeToName}}
+                  </mat-option>
+                </mat-optgroup>
+              </ng-container>
+            </mat-select>
+            <mat-label>Select {{chargeToId.value}}</mat-label>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <!--BLOCK 2 - ORIGINAL RIGHT UP-->
+    <mat-card class="card-column-two">
+      <mat-card-content>
+        <!--homeLocationId Repository -->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #repoVar
+            name="homeLocationId"
+            ngModel required>
+            <mat-option *ngFor="let rp of repos[0].Repos" [value]="rp.locationId">
+              {{rp.location}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Repository</mat-label>
+        </mat-form-field>
+        <!--departmentId-->
+        <div *ngIf="repos && getDepartment(repoVar.value) !== null">
+          <mat-form-field *ngIf="departments && departments.length > 0" appearance="outline">
+            <mat-select name="departmentId" ngModel>
+              <mat-option *ngFor="let dep of departments"
+                          [value]="dep.departmentId">{{dep.departmentName}}</mat-option>
+            </mat-select>
+            <mat-label> Department</mat-label>
+          </mat-form-field>
+        </div>
+        <!--curatorId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #curator
+            name="curatorId"
+            ngModel
+            required
+          >
+            <mat-option *ngFor="let cur of curators | orderBy: order"
+                        [value]="cur.personId">{{cur.sortName}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Curator {{curator.value}}</mat-label>
+        </mat-form-field>
+        <!--approvingCuratorId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #curatorPlus
+            name="approvingCuratorId"
+            ngModel
+            required
+          >
+            <mat-option *ngFor="let cur of curators | orderBy: order"
+                        [value]="cur.personId">{{cur.sortName}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Approving Curator {{curatorPlus.value}}</mat-label>
+        </mat-form-field>
+        <!--purposeId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #purpose
+            name="purposeId"
+            ngModel
+            required>
+            <mat-option *ngFor="let ps of purposes[0].Purposes" [value]="ps.purposeId">
+              {{ps.purpose}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Purpose {{purpose.value}}</mat-label>
+        </mat-form-field>
+        <!--storage-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #recordStorage
+            name="storage"
+            ngModel
+            required >
+            <mat-option *ngFor="let s of rstorage[0].Rstorage" [value]="s.storage">
+              {{s.storage}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Storage {{recordStorage.value}}</mat-label>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="card-column-three">
+      <mat-card-content>
+        <!--collectionName-->
+        <mat-form-field appearance="outline">
+          <input matInput
+                 placeholder="Collection Name or Other ID"
+                 name="collectionName"
+                 ngModel
+          >
+          <mat-label> Collection/Other ID</mat-label>
+        </mat-form-field>
+        <!--authorArtist-->
+        <mat-form-field appearance="outline">
+          <input matInput
+                 placeholder="Author or Artist"
+                 name="authorArtist"
+                 ngModel
+                 required>
+          <mat-label> Author/Artist</mat-label>
+        </mat-form-field>
+
+        <!--title-->
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            ngModel
+            name="title"
+            placeholder="title"
+            required>
+          <mat-label> Title</mat-label>
+        </mat-form-field>
+
+        <!--dateOfObject-->
+        <mat-form-field appearance="outline">
+          <input
+            #doo
+            matInput
+            placeholder="date of object"
+            name="dateOfObject"
+            ngModel
+            required>
+          <mat-label> Date Of Object {{doo.value}}</mat-label>
+        </mat-form-field>
+
+        <!--formatId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #recordFormat
+            name="formatId"
+            ngModel
+            required>
+            <mat-option *ngFor="let fm of formats[0].Formats" [value]="fm.formatId">
+              {{fm.format}}
+            </mat-option>
+          </mat-select>
+          <mat-label>Format {{recordFormat.value}}</mat-label>
+        </mat-form-field>
+        <mat-divider></mat-divider>
+        <p mat-line>Repository Info</p>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            name="expectedDateOfReturn"
+            [matDatepicker]="picker"
+            [ngModel]="expectedDateOfReturn"
+            placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <label>Expected Date Of Return</label>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            ngModel
+            name="insuranceValue"
+            placeholder="Amount"
+            type="number"
+            class="records-right-align">
+          <span matPrefix>$&nbsp;</span>
+          <mat-label> Insurance Value</mat-label>
+          <span matSuffix>.00</span>
+
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <textarea
+              name="fundMemo"
+              ngModel
+              matInput
+              placeholder="notes"></textarea>
+          <mat-label> Notes</mat-label>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+    <!--ITEMS COUNT TABLE BLOCK - BOTTOM LEFT-->
+    <mat-card class="card-column-four">
+      <mat-card-content>
+        <mat-card-header>Item Count <span class="records-caption">(slide to edit)</span></mat-card-header>
+        <div class="records-right-align">
+          <mat-slide-toggle
+            color="primary"
+            name="editCounter"
+            ngModel
+            #editCounter></mat-slide-toggle>
+        </div>
+        <!--<div class="items-count-wrap">-->
+        <div class="record-items">
+          <label mat-line>Volumes</label>
+          <mat-form-field>
+            <input matInput
+                   placeholder="count"
+                   type="number"
+                   name="volumeCount"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> count</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="volumeDescription"
+                    ngModel
+                    [disabled]="!editCounter.checked"
+          ></textarea>
+          </mat-form-field>
+        </div>
+        <div class="record-items">
+          <label>Sheets</label>
+          <mat-form-field>
+            <input matInput
+                   placeholder="count"
+                   type="number"
+                   name="sheetCount"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> count</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput
+                   placeholder="description"
+                   name="sheetDescription"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> description</mat-label>
+          </mat-form-field>
+        </div>
+        <div class="record-items">
+          <label>Photos</label>
+          <mat-form-field>
+            <input matInput
+                   placeholder="count"
+                   type="number"
+                   name="photoCount"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> count</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="photoDescription"
+                    ngModel
+                    [disabled]="!editCounter.checked"
+          ></textarea>
+            <!--<mat-label> description</mat-label>-->
+          </mat-form-field>
+        </div>
+        <div class="record-items">
+          <label>Other</label>
+          <mat-form-field>
+            <input matInput
+                   placeholder="count"
+                   type="number"
+                   name="otherCount"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> count</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="otherDescription"
+                    ngModel
+                    [disabled]="!editCounter.checked"
+          ></textarea>
+            <!--<mat-label> description</mat-label>-->
+          </mat-form-field>
+        </div>
+        <div class="record-items">
+          <label>Housing</label>
+          <mat-form-field>
+            <input matInput
+                   placeholder="count"
+                   type="number"
+                   name="housingCount"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> count</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="housingDescription"
+                    ngModel
+                    [disabled]="!editCounter.checked"
+          ></textarea>
+            <!--<mat-label> description</mat-label>-->
+          </mat-form-field>
+        </div>
+        <div class="record-items">
+          <label>Boxes</label>
+          <mat-form-field>
+            <input matInput
+                   placeholder="count"
+                   type="number"
+                   name="boxesCount"
+                   ngModel
+                   [disabled]="!editCounter.checked"
+            >
+            <mat-label> count</mat-label>
+          </mat-form-field>
+          <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="boxesDescription"
+                    ngModel
+                    [disabled]="!editCounter.checked"
+          ></textarea>
+            <!--<mat-label> description</mat-label>-->
+          </mat-form-field>
+        </div>
+        <!--</div>-->
+        <mat-divider></mat-divider>
+        <div class="not-collection-checkbox">
+          <mat-checkbox
+            #notCollection
+            ngModel
+            name="isNoNCollectionMaterial"
+          >Non-Collection Material</mat-checkbox>
+        </div>
+
+        <mat-form-field class="field-record-comments" appearance="outline">
+          <mat-label> Comments</mat-label>
+          <textarea
+            matInput
+            name="comments"
+            ngModel
+            placeholder="comments"></textarea>
+        </mat-form-field>
+      </mat-card-content>
+
+    </mat-card>
+  </div>
+  <mat-card class="submit-mat-card mat-elevation-z10">
+    <button mat-raised-button color="accent" type="button" (click)="onClear(f)">Clear</button>
+    <button mat-raised-button color="primary" type="submit">Save</button>
+  </mat-card>
+</form>

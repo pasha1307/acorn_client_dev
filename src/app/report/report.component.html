@@ -1,0 +1,21 @@
+<div class="proposal-header-div">
+  <h1>Reports</h1>
+</div>
+<mat-tab-group>
+  <mat-tab label="Not Submitted">
+    <mat-accordion class="proposal-submit-acc" multi="true">
+      <ng-container *ngFor="let r of reports">
+        <app-report-content [report]="r">
+          <button mat-button color="warn" (click)="onDelete(r.reportId)" class="report-del-btn">Delete</button>
+        </app-report-content>
+      </ng-container>
+    </mat-accordion>
+  </mat-tab>
+  <mat-tab label="Submitted">
+    <mat-accordion class="proposal-submit-acc" multi="true">
+      <ng-container *ngFor="let r of reports">
+        <p>{{r.reportId}}</p>
+      </ng-container>
+    </mat-accordion>
+  </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,533 @@
+<form #f="ngForm" (ngSubmit)="onSaveRecord(f)">
+  <!--BLOCK1 1 - original LEFT UP -->
+  <div class="cards-wrapper">
+    <mat-card class="card-column-one">
+      <mat-card-content>
+        <!--record-title-->
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="Record Title"
+            name="recordTitle"
+            [ngModel]="record?.title"
+            required >
+        </mat-form-field>
+        <!--projectId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #Project
+            name="projectId"
+            [ngModel]="record?.projectId"
+          >
+            <mat-option
+              *ngFor="let p of projects[0].Projects"
+              [value]="p.projectId">
+              {{p.projectName}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Project {{Project.value}}</mat-label>
+        </mat-form-field>
+        <!--groupId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #Group
+            placeholder="Group ID"
+            name="groupId"
+            [ngModel]="record?.groupId"
+          >
+            <mat-option
+              *ngFor="let p of groups[0].Groups"
+              [value]="p.groupId">
+              {{p.groupName}}
+            </mat-option>
+          </mat-select>
+          <mat-label>Group {{Group.value}}</mat-label>
+        </mat-form-field>
+        <!--Coordinator ID-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #coordinator
+            name="coordinatorId"
+            [ngModel]="record?.coordinatorId"
+            required>
+            <mat-option
+              *ngFor="let p of coordinators | orderBy: order"
+              [value]="p.personId">
+              {{p.sortName}}
+            </mat-option>
+          </mat-select>
+          <mat-label>Coordinator {{coordinator.value}}</mat-label>
+        </mat-form-field>
+        <!--Work Assigned To-->
+        <small>WORK ASSIGNED TO</small>
+        <mat-chip-list #asigneesList class="work-assigned-chip-list">
+          <mat-chip *ngFor="let w of currentAssigned"
+                    color="primary" selected>
+          {{w.person?.displayName}}
+            <mat-icon matChipRemove (click)="onRemove(w)">cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+        <mat-form-field appearance="outline">
+          <mat-select
+            #pa
+            [formControl]="assignedTo"
+            [(value)]="workAssignedToIds"
+            multiple>
+            <mat-option *ngFor="let prs of assignees | orderBy: order"
+                        [value]="prs.personId">{{prs.sortName}}</mat-option>
+          </mat-select>
+          <mat-label>Select more : {{pa.value}} </mat-label>
+        </mat-form-field>
+        <!--ChargeTo Container-->
+        <small class="work-assigned-small"> Current:
+          <span>{{record?.chargeToId}}</span>
+        </small>
+        <div class="chargeto-container">
+          <mat-card-content>
+            <mat-label>Charged To:{{chargeToId.value}}</mat-label>
+            <!--Charge Types Radio-->
+            <mat-radio-group
+              class="chargetype-radio-group"
+              name="chargeToType"
+              [(ngModel)]="typeValue">
+              <mat-radio-button
+                value="patron" color="accent"
+                labelPosition="after">
+                Patron
+              </mat-radio-button>
+              <mat-radio-button
+                #chargeType
+                value="project" color="accent"
+                labelPosition="after">
+                Project
+              </mat-radio-button>
+              <mat-radio-button
+                value="repo" color="accent"
+                labelPosition="after">
+                Repository
+              </mat-radio-button>
+            </mat-radio-group>x
+          </mat-card-content>
+          <!--ChargeTo Inputs-->
+          <mat-form-field appearance="outline" class="chargeto-field">
+            <mat-select
+              #chargeToId
+              name="chargeToId"
+              [value]="chargeToId.value"
+              [ngModel]="record?.chargeToId"
+              required>
+              <!--Patron Select-->
+              <ng-container>
+                <mat-optgroup label="Patrons" *ngIf="typeValue === 'patron'">
+                  <mat-option
+                    *ngFor="let pt of typePatrons"
+                    [value]="pt.ChargeToID">
+                    {{pt.ChargeToName}}
+                  </mat-option>
+                </mat-optgroup>
+              </ng-container>
+              <!--Project Select-->
+              <ng-container>
+                <mat-optgroup label="Projects" *ngIf="typeValue === 'project'">
+                  <mat-option
+                    [value]="pr.ChargeToID"
+                    *ngFor="let pr of typeProjects">
+                    {{pr.ChargeToName}}
+                  </mat-option>
+                </mat-optgroup>
+              </ng-container>
+              <!--Repo Select-->
+              <ng-container>
+                <mat-optgroup label="Repositories" *ngIf="typeValue === 'repo'">
+                  <mat-option
+                    [value]="rp.ChargeToID"
+                    *ngFor="let rp of typeRepos">
+                    {{rp.ChargeToName}}
+                  </mat-option>
+                </mat-optgroup>
+              </ng-container>
+            </mat-select>
+            <mat-label>Select {{chargeToId.value}}</mat-label>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <!--BLOCK 2 - ORIGINAL RIGHT UP-->
+    <mat-card class="card-column-two">
+      <mat-card-content>
+        <!--Repository ID-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #repoLocation
+            name="homeLocationId"
+            [ngModel]="record?.homeLocationId"
+            required>
+            <mat-option
+              *ngFor="let rp of repos[0].Repos"
+              [value]="rp.locationId">
+              {{rp.location}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Repository {{repoLocation.value}}</mat-label>
+        </mat-form-field>
+        <!--DepartmentId-->
+        <div *ngIf="repos[0].Repos && getDepartment(repoLocation.value) !== null">
+          <mat-form-field *ngIf="departments && departments.length > 0" appearance="outline">
+            <mat-select
+              #Dept
+              name="departmentId"
+              [ngModel]="record?.departmentId"
+            >
+              <mat-option
+                *ngFor="let dep of departments"
+                [value]="dep.departmentId">
+                {{dep.departmentName}}
+              </mat-option>
+            </mat-select>
+            <mat-label> Department {{Dept.value}}</mat-label>
+          </mat-form-field>
+        </div>
+        <!--curatorId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #Curator
+            name="curatorId"
+            [ngModel]="record?.curatorId"
+            required
+          >
+            <mat-option
+              *ngFor="let cur of curators | orderBy: order"
+              [value]="cur.personId">
+              {{cur.sortName}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Curator {{Curator.value}}</mat-label>
+        </mat-form-field>
+        <!--approvingCuratorId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #curatorPlus
+            name="approvingCuratorId"
+            [ngModel]="record?. approvingCuratorId"
+            required
+          >
+            <mat-option *ngFor="let cur of curators | orderBy: order"
+                        [value]="cur.personId">{{cur.sortName}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Approving Curator {{curatorPlus.value}}</mat-label>
+        </mat-form-field>
+        <!--purposeId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #Purpose
+            name="purposeId"
+            [ngModel]="record?.purposeId"
+            required>
+            <mat-option
+              *ngFor="let ps of purposes[0].Purposes"
+              [value]="ps.purposeId">
+              {{ps.purpose}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Purpose {{Purpose.value}}</mat-label>
+        </mat-form-field>
+        <!--storage-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #recordStorage
+            name="storage"
+            [ngModel]="record?.storage"
+            required >
+            <mat-option *ngFor="let s of rstorage[0].Rstorage" [value]="s.storage">
+              {{s.storage}}
+            </mat-option>
+          </mat-select>
+          <mat-label> Storage {{recordStorage.value}}</mat-label>
+        </mat-form-field>
+        <!--call numbers-->
+        <ng-container class="call-numbers-container">
+          <mat-form-field class="call-numbers-chip-list" appearance="outline">
+            <mat-chip-list #chipList>
+              <mat-chip *ngFor="let callN of callNumbers"
+                        [selectable]="selectable"
+                        [removable]="removable"
+                        (removed)="remove(callN)"
+                        color="primary" selected>
+                {{callN.callNumber}}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="Add Call Number..."
+                     matInput
+                     name="callNumber"
+                     [(ngModel)] = callNumber
+                     [matChipInputFor]="chipList"
+                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                     [matChipInputAddOnBlur]="addOnBlur"
+                     (matChipInputTokenEnd)="add($event)">
+            </mat-chip-list>
+          </mat-form-field>
+        </ng-container>
+        <mat-divider></mat-divider>
+        <!--HOLLIS-->
+        <div class="hollis-div">
+          <a [href]="HOLLIS_URL" mat-fab color="accent" target="_blank" class="hollis-link">
+            <small>get</small><small class="hollis-small"> hollis</small>
+            <!--<mat-icon>import_export</mat-icon>-->
+          </a>
+          <mat-form-field appearance="outline">
+            <input matInput
+                   name="hollisNumber"
+                   [ngModel]="record?.hollisNumber" >
+            <mat-label>Insert HOLLIS Number</mat-label>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <!--BLOCK 5 - ORIGINAL SECOND ROW RIGHT-->
+    <mat-card class="card-column-three">
+      <mat-card-content>
+        <!--collectionName-->
+        <mat-form-field appearance="outline">
+          <input matInput
+                 placeholder="Collection Name or Other ID"
+                 name="collectionName"
+                 [ngModel]="record?.collectionName"
+          >
+          <mat-label> Collection/Other ID</mat-label>
+        </mat-form-field>
+        <!--authorArtist-->
+        <mat-form-field appearance="outline">
+          <input matInput
+                 placeholder="Author or Artist"
+                 name="authorArtist"
+                 [ngModel]="record?.authorArtist"
+                 required>
+          <mat-label> Author/Artist</mat-label>
+        </mat-form-field>
+        <!--title-->
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            [ngModel]="record?.itemIdentification?.title"
+            name="title"
+            placeholder="title"
+            required>
+          <mat-label> Title</mat-label>
+        </mat-form-field>
+        <!--dateOfObject-->
+        <mat-form-field appearance="outline">
+          <input
+            #doo
+            matInput
+            placeholder="date of object"
+            name="dateOfObject"
+            [ngModel]="record?.dateOfObject"
+            required>
+          <mat-label> Date Of Object {{doo.value}}</mat-label>
+        </mat-form-field>
+        <!--formatId-->
+        <mat-form-field appearance="outline">
+          <mat-select
+            #recordFormat
+            name="formatId"
+            [ngModel]="record?.formatId"
+            required>
+            <mat-option *ngFor="let fm of formats[0].Formats" [value]="fm.formatId">
+              {{fm.format}}
+            </mat-option>
+          </mat-select>
+          <mat-label>Format {{recordFormat.value}}</mat-label>
+        </mat-form-field>
+        <mat-divider></mat-divider>
+        <p mat-line>Repository Info</p>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            name="expectedDateOfReturn"
+            [matDatepicker]="picker"
+            [ngModel]="record?.expectedDateOfReturn"
+            placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <label>Expected Date Of Return</label>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            [ngModel]="record?.insuranceValue"
+            name="insuranceValue"
+            placeholder="Amount"
+            type="number"
+            class="records-right-align">
+          <span matPrefix>$&nbsp;</span>
+          <mat-label> Insurance Value</mat-label>
+          <span matSuffix>.00</span>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <textarea
+              name="fundMemo"
+              [ngModel]="record?.fundMemo"
+              matInput
+              placeholder="notes"></textarea>
+          <mat-label> Notes</mat-label>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+    <!--ITEMS COUNT TABLE BLOCK - BOTTOM LEFT-->
+    <mat-card class="card-column-four">
+      <mat-card-content>
+        <mat-card-header>Item Count</mat-card-header>
+        <div *ngIf="record?.itemIdentification.item?.initialCounts.length">
+          <div class="record-items">
+            <label mat-line>Volumes</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="volumeCount"
+                     [ngModel]="record?.itemIdentification.item?.initialCounts[0].totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="volumeDescription"
+                    [ngModel]="record?.itemIdentification?.item?.initialCounts[0]?.description"
+          ></textarea>
+            </mat-form-field>
+          </div>
+          <!--sheets-->
+          <div class="record-items">
+            <label>Sheets</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="sheetCount"
+                     [ngModel]="record?.itemIdentification?.item?.initialCounts[1]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput
+                     placeholder="description"
+                     name="sheetDescription"
+                     [ngModel]="record?.itemIdentification?.item?.initialCounts[1]?.description"
+              >
+              <mat-label> description</mat-label>
+            </mat-form-field>
+          </div>
+          <!--photos-->
+          <div class="record-items">
+            <label>Photos</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="photoCount"
+                     [ngModel]="record?.itemIdentification?.item?.initialCounts[2]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="photoDescription"
+                    [ngModel]="record?.itemIdentification?.item?.initialCounts[2]?.description"
+          ></textarea>
+              <!--<mat-label> description</mat-label>-->
+            </mat-form-field>
+          </div>
+          <!--other-->
+          <div class="record-items">
+            <label>Other</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="otherCount"
+                     [ngModel]="record?.itemIdentification?.item?.initialCounts[3]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="otherDescription"
+                    [ngModel]="record?.itemIdentification?.item?.initialCounts[3]?.description"
+          ></textarea>
+            </mat-form-field>
+          </div>
+          <!--housing-->
+          <div class="record-items">
+            <label>Housing</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="housingCount"
+                     [ngModel]="record?.itemIdentification?.item?.initialCounts[4]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="housingDescription"
+                    [ngModel]="record?.itemIdentification?.item?.initialCounts[4]?.description"
+          ></textarea>
+              <!--<mat-label> description</mat-label>-->
+            </mat-form-field>
+          </div>
+          <!--boxes-->
+          <div class="record-items">
+            <label>Boxes</label>
+            <mat-form-field>
+              <input matInput
+                     placeholder="count"
+                     type="number"
+                     name="boxesCount"
+                     [ngModel]="record?.itemIdentification?.item?.initialCounts[5]?.totalCount"
+              >
+              <mat-label> count</mat-label>
+            </mat-form-field>
+            <mat-form-field>
+          <textarea matInput
+                    placeholder="description"
+                    name="boxesDescription"
+                    [ngModel]="record?.itemIdentification?.item?.initialCounts[5]?.description"
+          ></textarea>
+              <!--<mat-label> description</mat-label>-->
+            </mat-form-field>
+          </div>
+        </div>
+        <!--volumes-->
+        <mat-divider></mat-divider>
+        <div class="not-collection-checkbox">
+          <mat-checkbox
+            #notCollection
+            [ngModel]="record?.isNonCollectionMaterial"
+            name="isNoNCollectionMaterial"
+          >Non-Collection Material</mat-checkbox>
+        </div>
+        <div class="work-description-div">
+          <mat-form-field appearance="outline">
+            <textarea
+              name="fundMemo"
+              [ngModel]="record?.fundMemo"
+              matInput
+              placeholder="Work Description"></textarea>
+            <mat-label> Work Description</mat-label>
+          </mat-form-field>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <mat-card class="submit-mat-card mat-elevation-z10">
+    <button mat-raised-button color="accent" type="button" (click)="onClear(f)">Clear</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!f.valid">Save</button>
+  </mat-card>
+</form>

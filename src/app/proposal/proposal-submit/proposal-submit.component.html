@@ -1,0 +1,74 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header class="panel-header-item">
+    <mat-panel-title>
+     Details #{{proposal.proposalId}} -
+      <span *ngIf="proposal.Record">record #{{proposal?.Record?.recordId}}</span>
+      <span *ngIf="!proposal.Record">item #{{proposal?.itemIdentification?.item?.itemId}}</span>
+    </mat-panel-title>
+    <mat-panel-description>
+      not submitted
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <mat-divider></mat-divider>
+  <div class="proposal-div">
+    <section class="callnums-size-div">
+      <p *ngIf="proposal?.itemIdentification?.callNumbers">
+        Call Numbers:
+        <span *ngFor="let el of proposal.itemIdentification.callNumbers">{{el.callNumber}}</span>;
+      </p>
+      <p *ngIf="proposal?.height">Size:
+        <span>H = {{proposal?.height}}; W = {{proposal?.width}}; Th = {{proposal?.thickness}} </span>
+      </p>
+    </section>
+    <section class="initial-counts-div" *ngIf="proposal?.itemIdentification?.item?.initialCounts?.length > 0">
+        <p>Initial Counts:</p>
+        <table>
+          <tr>
+            <th>Types</th>
+            <th>Count</th>
+            <th>Description</th>
+          </tr>
+          <tr *ngFor="let ct of proposal?.itemIdentification.item.initialCounts">
+            <td *ngIf="ct.countType">{{ct.countType}}</td>
+            <td *ngIf="ct.totalCount">{{ct.totalCount}}</td>
+            <td *ngIf="!ct.totalCount">--</td>
+            <td *ngIf="ct.description">{{ct.description}}</td>
+            <td *ngIf="!ct.description">--</td>
+          </tr>
+        </table>
+    </section>
+  </div>
+
+  <mat-divider></mat-divider>
+  <div class="proposal-view-div">
+    <section class="proposal-item-info-left">
+      <p>Repository: <span>{{proposal?.examLocationId}} - {{proposal?.location?.Location}}</span></p>
+      <p>Coordinator: <span>{{proposal?.itemIdentification?.item?.person?.DisplayName}}</span></p>
+      <p *ngIf="proposal.Record != null">Curator: <span>{{proposal?.Record.Curator.DisplayName}}</span></p>
+      <p *ngIf="proposal.Record == null">Curator:
+        <span>{{proposal?.itemIdentification.ItemCurator.DisplayName}}</span>
+      </p>
+    </section>
+    <section class="proposal-item-info-right">
+      <p *ngIf="proposal.Record">Project: <span>{{proposal?.Record?.project?.ProjectName}}</span></p>
+      <p *ngIf="proposal.Record">Group: <span>{{proposal?.Record?.group?.GroupName}}</span></p>
+      <p>Author/Artist: <span>{{proposal?.itemIdentification?.item?.authorArtist}}</span></p>
+      <p>Item Title: <span>{{proposal?.itemIdentification?.Title}}</span></p>
+      <p>Date Of Object: <span>{{proposal?.itemIdentification?.item?.dateOfObject}}</span></p>
+    </section>
+  </div>
+  <mat-divider></mat-divider>
+    <p>Description: <span>{{proposal?.description}}</span></p>
+    <p>Condition: <span>{{proposal?.condition}}</span></p>
+    <p>Proposed Treatment: <span>{{proposal?.treatment}}</span></p>
+    <p>Proposed By: <span *ngFor="let p of proposal?.PropBy">
+          {{p.displayName}} - {{p.emailAddress}}
+        </span></p>
+    <p>Proposed hours: <span>{{proposal?.minimumProposedHours}} - {{proposal?.maximumProposedHours}}</span></p>
+    <p>Notification To: <span>{{proposal?.itemIdentification?.ItemCuratorPlus?.EmailAddress}}</span></p>
+    <p>Notification CC: <span>{{proposal?.itemIdentification?.ItemCurator?.EmailAddress}}</span></p>
+
+  <mat-action-row>
+    <ng-content></ng-content>
+  </mat-action-row>
+</mat-expansion-panel>

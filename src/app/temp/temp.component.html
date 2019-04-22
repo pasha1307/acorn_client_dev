@@ -1,0 +1,11 @@
+<div>
+  <mat-card class="temp mat-elevation-z17">
+    <mat-card-header *ngIf="msg">
+      <button mat-raised-button [routerLink]="['app']" color="accent">Back to {{msg.title | titlecase }}</button>
+    </mat-card-header>
+    <mat-card-content>
+      <h1 *ngIf="msg.text">
+        {{msg.text}}
+      </h1>
+    </mat-card-content>
+  </mat-card>

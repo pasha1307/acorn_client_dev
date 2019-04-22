@@ -1,0 +1,57 @@
+<h1 mat-dialog-title>Hi {{person.displayName}} - {{person.personId}}</h1>
+
+<mat-dialog-content [formGroup]="form">
+  <mat-form-field>
+    <input matInput
+           placeholder="First Name"
+           formControlName="firstName"
+    >
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput
+           placeholder="Last Name"
+           formControlName="lastName">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput
+           placeholder="Middle Name"
+           formControlName="middleName">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-select placeholder="Access Level"
+                formControlName="accessLevel"
+                [value]="person.accessLevel"
+    >
+      <mat-option [value]="l" *ngFor="let l of accessLevel">
+        {{l}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-select placeholder="Select location'"
+                formControlName="locationId"
+                [value]="person.locationId"
+    >
+      <mat-option [value]="l.locationId" *ngFor="let l of locations$ | async">
+        {{l.location}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-slide-toggle class="list-form-location-status" labelPosition="before"
+                    #userStatus formControlName="userInactive" color="primary">
+    Current Status: {{person.inactive}}
+    <span *ngIf="userStatus.checked" class="location-status-label inactive">(Inactive)</span>
+    <span *ngIf="!userStatus.checked" class="location-status-label active">(Active)</span>
+  </mat-slide-toggle>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="close()">Close</button>
+  <button mat-button #saveEdit (click)="onSave(person.personId)">Save</button>
+  <!--<button class="mat-raised-button"-->
+  <!--(click)="close()">-->
+  <!--Close-->
+  <!--</button>-->
+  <!--<button class="mat-raised-button mat-primary" #saveButton (click)="save()">-->
+  <!--Save-->
+  <!--</button>-->
+
+</mat-dialog-actions>

@@ -1,0 +1,104 @@
+:host {
+  width: 100vw;
+  display: block;
+  padding-bottom: 70px;
+  //margin: auto;
+}
+mat-card {
+  min-width: 50px;
+}
+fieldset {
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 5px;
+  min-width: 50px;
+}
+mat-form-field {
+  width: 100%;
+  min-width: 50px;
+}
+.report-edit-header-div {
+  margin: 80px auto 10px auto;
+  > * {
+    text-align: center;
+  }
+}
+.cards-wrapper {
+  display: flex;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1200px;
+  justify-content: center;
+  flex-wrap: wrap;
+  > * {
+    flex: 1;
+    margin: 5px;
+  }
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    > * {
+      margin: 5px;
+    }
+    .report-checkboxes-div {
+      margin: 20px auto;
+      mat-checkbox {
+        display: inline-block;
+        margin: 0 10px ;
+        //background-color: pink;
+      }
+    }
+    mat-form-field {
+      font-size: 0.9em;
+    }
+    mat-card.card-column-one {
+      flex: 1;
+    }
+    mat-card.card-column-two {
+      flex: 1;
+    }
+    mat-card.card-column-three {
+      flex: 2;
+    }
+    mat-card.card-column-four {
+      flex: 2;
+      .report-recommendation-ta {
+        textarea {
+          min-height: 60px;
+        }
+      }
+      .report-treatment-ta {
+        textarea {
+          min-height: 80px;
+        }
+      }
+      .report-summary-ta {
+        textarea {
+          min-height: 40px;
+        }
+      }
+    }
+  }
+}
+.record-items {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: baseline;
+  max-width: 100%;
+  label {
+    margin-right: 10px;
+  }
+  mat-form-field {
+    min-width: 30px;
+  }
+}
+.record-items > mat-form-field:nth-of-type(1) {
+  max-width: 50px;
+  margin-right: 10px;
+}
+.submit-mat-card {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}

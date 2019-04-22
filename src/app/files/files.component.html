@@ -1,0 +1,46 @@
+<ng-container *ngIf="dataSource.data.length">
+  <mat-form-field class="search-mat-field">
+    <input matInput placeholder="search files" #input (keyup)="onSearch(input.value)">
+  </mat-form-field>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="pkid">
+      <th mat-header-cell *matHeaderCellDef> # </th>
+      <td mat-cell *matCellDef="let element"> {{element?.pkid}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fileName">
+      <th mat-header-cell *matHeaderCellDef> File Name </th>
+      <td mat-cell *matCellDef="let element"> {{element?.fileName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef>  Description</th>
+      <td mat-cell *matCellDef="let element"> {{element?.description}} </td>
+    </ng-container>
+
+<!--    <ng-container matColumnDef="path">-->
+<!--      <th mat-header-cell *matHeaderCellDef>  Path</th>-->
+<!--      <td mat-cell *matCellDef="let element"> {{element?.path}} </td>-->
+<!--    </ng-container>-->
+
+    <ng-container matColumnDef="enteredById">
+      <th mat-header-cell *matHeaderCellDef>  Uploaded By</th>
+      <td mat-cell *matCellDef="let element"> {{element?.enteredById}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row *matRowDef="let row; columns: displayedColumns;"
+      (click)="onRowDef(row)"
+      [matTooltip]="hoverText"
+      matTooltipPosition="above"
+      matTooltipClass="tooltip-del-info"
+    ></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
+</ng-container>
+<div *ngIf="!dataSource.data.length" class="no-files-div">
+  <mat-chip-list>
+    <mat-chip color="warn" selected>No files in the database for this user</mat-chip>
+  </mat-chip-list>
+</div>

@@ -1,0 +1,77 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header class="panel-header-item">
+    <mat-panel-title>
+      {{r.title}}
+    </mat-panel-title>
+    <mat-panel-description>
+      #{{r.recordId}}
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <div class="record-osw-detail">
+    <p>OSW ID: <span>{{r.identificationId}}</span></p>
+    <p *ngIf="r.itemIdentification">
+      Call Numbers:
+      <span *ngFor="let cn of r.itemIdentification.callNumbers">{{cn.callNumber}}, </span>
+    </p>
+    <div class="belongs-to-item item-counts" *ngIf="r.itemIdentification?.item?.initialCounts?.length > 0">
+      <p>Initial Counts:</p>
+      <table>
+        <tr>
+          <th>Types</th>
+          <th>Count</th>
+          <th>Description</th>
+        </tr>
+        <tr *ngFor="let ct of r.itemIdentification.item.initialCounts">
+          <td *ngIf="ct.countType">{{ct.countType}}</td>
+          <td *ngIf="ct.totalCount">{{ct.totalCount}}</td>
+          <td *ngIf="!ct.totalCount">--</td>
+          <td *ngIf="ct.description">{{ct.description}}</td>
+          <td *ngIf="!ct.description">--</td>
+        </tr>
+      </table>
+    </div>
+    <p *ngIf="r.homeLocationId">Is it Repo Home?: <span>{{r.location?.isWorkLocation}}</span></p>
+
+    <p *ngIf="r.location">Home Location:
+      <span>{{r.HomeLocationID}} - {{r.location?.Location}}</span>
+    </p>
+    <p *ngIf="r.departmentId">Department:
+      <span> {{r.departmentId}} - {{r.department?.DepartmentName}}</span>
+    </p>
+    <p *ngIf="r.coordinatorId">Coordinator:
+      <span>#{{r.coordinatorId}} -{{r.Coordinator?.DisplayName}}</span>
+    </p>
+    <p *ngIf="r.curatorId">Curator:
+      <span>#{{r.curatorId}}-{{r.Curator?.DisplayName}}</span>
+    </p>
+    <p *ngIf="r.chargeToId">Charge To ID: <span> {{r.chargeToId}}</span></p>
+
+    <p *ngIf="r.projectId">Project:
+      <span>{{r.ProjectID}} - {{r.project?.ProjectName}}</span>
+    </p>
+    <p *ngIf="r.groupId">Group:
+      <span>{{r.groupId}} - {{r.group?.GroupName}}</span>
+    </p>
+    <p>Purpose:
+      <span> {{r?.purposeId}} - {{r?.purpose?.Purpose}}</span>
+    </p>
+    <p *ngIf="r.formatId">Format:
+      <span>{{r.formatId}} - {{r.format?.Format}}</span>
+    </p>
+    <p *ngIf="r.osw">Work Start Date: <span>{{r.osw.workStartDate | date}}</span></p>
+    <p *ngIf="r.osw">Work End Date: <span>{{r.osw.workEndDate | date}}</span></p>
+    <p *ngIf="r.osw">Proposed Hours: <span>{{r.osw.proposedHours}}</span></p>
+    <p *ngIf="r.osw">Work Location ID: <span>{{r.osw.workLocationId}} - {{r.osw.location?.location}} </span></p>
+    <p *ngIf="r.osw.workTypes">Work Types:
+      <span *ngFor="let wt of r.osw.workTypes">
+             {{wt.workType}}
+            </span>
+    </p>
+    <p *ngIf="r.fundMemo">Work Description: <span> {{r.fundMemo}}</span></p>
+    <p *ngIf="r.comments">Comments: <span> {{r.comments}}</span></p>
+  </div>
+  <mat-action-row>
+    <a mat-button color="primary" [routerLink]="['/app/edit/osw/', r.recordId]">Edit</a>
+    <button mat-button color="warn" (click)="onDelete(r.recordId)">Delete</button>
+  </mat-action-row>
+</mat-expansion-panel>

@@ -1,0 +1,113 @@
+<div class="record-edit-div">
+  <p mat-line>Record #{{recordId}}</p>
+</div>
+<mat-tab-group>
+  <mat-tab label="Edit">
+    <app-record-update [record]="record"
+                     [callNumbers]="callNumbers"
+                     [currentAssigned]="currentAssigned"
+                     (onedit)="onPost($event)">
+    </app-record-update>
+  </mat-tab>
+  <mat-tab label="Proposal" *ngIf="record?.itemIdentification?.itemProposal === null">
+    <app-proposal-create [record]="record"></app-proposal-create>
+  </mat-tab>
+  <mat-tab label="Report">
+    <app-report-create [record]="record" (onsave)="onReport($event)">
+      <section class="work-done-section">
+<!--        <fieldset>-->
+          <p mat-line>Work Done By*</p>
+          <mat-accordion>
+            <form [formGroup]="workDoneForm" fxLayout="column">
+              <div formArrayName="members">
+                <mat-expansion-panel *ngFor="let item of getControls(); let i = index;">
+                  <mat-expansion-panel-header>
+                    <mat-chip color="accent" selected>
+              <span
+                *ngIf="doneName">{{doneName?.selected?.viewValue}}</span> {{doneDate.value | date}} {{doneHours.value}}
+                      <mat-icon (click)="removePerson(i)">cancel</mat-icon>
+                    </mat-chip>
+                  </mat-expansion-panel-header>
+                  <div [formGroupName]="i">
+                    <mat-form-field>
+                      <mat-label> Work Done By</mat-label>
+                      <mat-select
+                        #doneName
+                        placeholder="Name"
+                        formControlName="personId">
+                        <mat-option *ngFor="let c of coordinators | orderBy: order"
+                                    [value]="c.personId">{{c.displayName}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <div class="date-time-div">
+                      <mat-form-field>
+                        <input
+                          #doneDate
+                          matInput
+                          formControlName="dateCompleted"
+                          [matDatepicker]="pickerA"
+                          placeholder="Date">
+                        <mat-datepicker-toggle matPrefix [for]="pickerA"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerA></mat-datepicker>
+                      </mat-form-field>
+                      <mat-form-field>
+                        <input matInput
+                               #doneHours
+                               type="number"
+                               placeholder="Total Hours"
+                               formControlName="completedHours"
+                        >
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+              </div>
+            </form>
+          </mat-accordion>
+          <button mat-icon-button (click)="addPerson()">
+            <mat-icon>library_add</mat-icon>
+          </button>
+<!--        </fieldset>-->
+      </section>
+
+
+    </app-report-create>
+  </mat-tab>
+  <mat-tab label="Files">
+    <app-file-upload
+      [coordinatorId]="coordinatorId"
+      [identificationId]="identificationId"
+    >
+      <ng-container *ngIf="record?.itemIdentification?.itemFiles.length > 0">
+        <p mat-line>Files for the Item {{record?.itemIdentification?.identificationId}}</p>
+        <div class="item-image-wrap">
+          <div *ngFor="let img of record?.itemIdentification?.itemFiles; let i = index"
+               class="item-image-div"
+          >
+            <img [src]="img.path" [alt]="img.description"
+                 matTooltip="Click to Enlarge "
+                 matTooltipPosition="above"
+                 matTooltipClass="tooltip-zoom-info"
+                 (click)="onImgDialog(img)"
+            >
+            <button mat-icon-button color="warn" (click)="onDeleteFile(img.fileId)"><mat-icon>delete</mat-icon></button>
+          </div>
+        </div>
+
+      </ng-container>
+    </app-file-upload>
+    <mat-divider></mat-divider>
+    <ng-container *ngIf="coordinatorId">
+      <app-files [coordinatorId]="coordinatorId"></app-files>
+    </ng-container>
+
+<!--    <mat-card>-->
+<!--      <mat-card-content>-->
+<!--&lt;!&ndash;        <button mat-raised-button (click)="getFiles(coordinatorId)">Try It</button>&ndash;&gt;-->
+<!--        <div *ngIf="(files$ | async) as files">-->
+<!--            <p *ngFor="let f of files">{{f.fileName}}</p>-->
+<!--        </div>-->
+<!--      </mat-card-content>-->
+<!--    </mat-card>-->
+  </mat-tab>
+</mat-tab-group>

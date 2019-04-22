@@ -1,0 +1,25 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header class="panel-header-item">
+    <mat-panel-title>
+      {{r.groupName}}
+    </mat-panel-title>
+    <mat-panel-description>
+      #{{r.groupId}}
+      <span class="inactive-span" *ngIf="r.inactive"> inactive </span>
+      <span class="active-span" *ngIf="!r.inactive"> active </span>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <div *ngIf="r.Records">
+    <mat-card *ngFor="let el of r.Records">
+      <mat-card-header #koo>{{el.title}}</mat-card-header>
+      <mat-card-content>
+        {{el.recordId}}
+        <a mat-button color="primary" [routerLink]="['/app/edit/record/', el.recordId]">Edit</a>
+        <button mat-stroked-button (click)="onGroupStatus(el.recordId)">Remove From Group</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <mat-action-row>
+    <ng-content></ng-content>
+  </mat-action-row>
+</mat-expansion-panel>

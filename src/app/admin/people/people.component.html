@@ -1,0 +1,224 @@
+<div class="location-create-new">
+  <mat-expansion-panel #panelForm>
+    <mat-expansion-panel-header class="location-panel-header">
+      <mat-panel-title>
+        <span *ngIf="!firstName.value">
+          <mat-icon>person_add</mat-icon>
+        </span>
+        <span *ngIf="firstName.value || lastName.value">
+          {{firstName.value | uppercase}} {{lastName.value | uppercase}}
+        </span>
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form #f="ngForm" (ngSubmit)="onCreate(f)">
+      <div class="list-form-wrap">
+        <mat-form-field >
+          <input matInput
+                 #firstName
+                 name="firstName"
+                 ngModel
+                 placeholder="first name"
+                 required
+          >
+        </mat-form-field>
+        <mat-form-field >
+          <input matInput
+                 #lastName
+                 name="lastName"
+                 ngModel
+                 placeholder="last name"
+                 required
+          >
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput
+                 #middleName
+                 name="middleName"
+                 ngModel
+                 placeholder="middle name"
+                 required
+          >
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput
+                 #userName
+                 name="username"
+                 ngModel
+                 placeholder="user name"
+                 required >
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput
+                 #emailAddress
+                 name="emailAddress"
+                 ngModel
+                 placeholder="email"
+                 required >
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput
+                 #userPassword
+                 name="userPassword"
+                 ngModel
+                 placeholder="password"
+                 type="password"
+                 required >
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select placeholder="Select access level"
+                      ngModel
+                      name="accessLevel">
+            <mat-option [value]="l" *ngFor="let l of userAccess">
+              {{l}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select placeholder="Select location ID"
+                      ngModel
+                      name="locationId">
+            <mat-option [value]="l.locationId" *ngFor="let l of locations$ | async">
+              {{l.location}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <mat-action-row>
+        <button mat-button color="basic" type="button" (click)="onCancel(f)">Cancel</button>
+        <button mat-button color="primary" type="submit">Save</button>
+
+      </mat-action-row>
+    </form>
+  </mat-expansion-panel>
+</div>
+<mat-divider></mat-divider>
+<mat-tab-group mat-align-tabs="end">
+  <mat-tab label="Admin">
+    <div class="people-list-wrap">
+      <mat-accordion class="people-accordion" *ngFor="let p of adminUsers$ | async">
+        <mat-expansion-panel >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{p.sortName}}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{p.accessLevel}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>Location ID: {{p.locationId}}</p>
+          <p>Person ID: {{p.personId}}</p>
+          <p>Display Name: {{p.displayName}}</p>
+          <p>username: {{p.username}}</p>
+          <p>Email: {{p.emailAddress}}</p>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="onDelete(p.personId)">Delete</button>
+            <button mat-button (click)="editPerson(p)">Edit</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-tab>
+  <mat-tab label="Curators">
+    <div class="people-list-wrap">
+      <mat-accordion class="" *ngFor="let p of curatorUsers$ | async">
+        <mat-expansion-panel >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{p.sortName}}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{p.accessLevel}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>Location ID: {{p.locationId}}</p>
+          <p>Person ID: {{p.personId}}</p>
+          <p>Display Name: {{p.displayName}}</p>
+          <p>username: {{p.username}}</p>
+          <p>Email: {{p.emailAddress}}</p>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="onDelete(p.personId)">Delete</button>
+            <button mat-button (click)="editPerson(p)">Edit</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-tab>
+  <mat-tab label="Repo Admin">
+    <div   class="people-list-wrap">
+      <mat-accordion class="" *ngFor="let p of repoAdminUsers$ | async">
+        <mat-expansion-panel >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{p.sortName}}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{p.accessLevel}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>Location ID: {{p.locationId}}</p>
+          <p>Person ID: {{p.personId}}</p>
+          <p>Display Name: {{p.displayName}}</p>
+          <p>username: {{p.username}}</p>
+          <p>Email: {{p.emailAddress}}</p>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="onDelete(p.personId)">Delete</button>
+            <button mat-button (click)="editPerson(p)">Edit</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-tab>
+  <mat-tab label="Repo">
+    <div   class="people-list-wrap">
+      <mat-accordion class="" *ngFor="let p of repoUsers$ | async">
+        <mat-expansion-panel >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{p.sortName}}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{p.accessLevel}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>Location ID: {{p.locationId}}</p>
+          <p>Person ID: {{p.personId}}</p>
+          <p>Display Name: {{p.displayName}}</p>
+          <p>username: {{p.username}}</p>
+          <p>Email: {{p.emailAddress}}</p>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="onDelete(p.personId)">Delete</button>
+            <button mat-button (click)="editPerson(p)">Edit</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-tab>
+  <mat-tab label="Regular">
+    <div   class="people-list-wrap">
+      <mat-accordion class="" *ngFor="let p of regularUsers$ | async">
+        <mat-expansion-panel >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{p.sortName}}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{p.accessLevel}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>Location ID: {{p.locationId}}</p>
+          <p>Person ID: {{p.personId}}</p>
+          <p>Display Name: {{p.displayName}}</p>
+          <p>username: {{p.username}}</p>
+          <p>Email: {{p.emailAddress}}</p>
+          <mat-action-row>
+            <button mat-button color="warn" (click)="onDelete(p.personId)">Delete</button>
+            <button mat-button (click)="editPerson(p)">Edit</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-tab>
+</mat-tab-group>

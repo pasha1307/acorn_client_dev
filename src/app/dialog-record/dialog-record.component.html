@@ -1,0 +1,137 @@
+<div class="dialog-header-wrap">
+  <h3 mat-dialog-title>Record Title: {{data.recordTitle}}
+    <span class="img-subtitle-dialog">RecordID: {{data.recordId}}</span>
+  </h3>
+  <button mat-icon-button
+          [mat-dialog-close]="true"
+          color="primary"
+          class="dialog-close-btn"
+          matTooltip="Close image"
+          matTooltipPosition="above"
+          matTooltipClass="tooltip-zoom-info"
+  >
+    <mat-icon>clear</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <div>
+    <section class="panel-header-item">
+      <mat-panel-title>
+        {{data.title}}
+      </mat-panel-title>
+      <mat-panel-description>
+        #{{data.recordId}}
+      </mat-panel-description>
+    </section>
+    <div class="record-item-detail">
+      <p *ngIf="data.itemIdentification">
+        Call Numbers:
+        <span *ngFor="let cn of data.itemIdentification.callNumbers">{{cn.callNumber}}, </span>
+      </p>
+      <p>Item ID:
+        <span>{{data.identificationId}}</span>
+      </p>
+
+      <div class="belongs-to-item">
+        <div class="belongs-to-item item-counts" *ngIf="data.itemIdentification?.item?.initialCounts?.length > 0">
+          <p>Initial Counts:</p>
+          <table>
+            <tr>
+              <th>Types</th>
+              <th>Count</th>
+              <th>Description</th>
+            </tr>
+            <tr *ngFor="let ct of data.itemIdentification.item.initialCounts">
+              <td *ngIf="ct.countType">{{ct.countType}}</td>
+              <td *ngIf="ct.totalCount">{{ct.totalCount}}</td>
+              <td *ngIf="!ct.totalCount">--</td>
+              <td *ngIf="ct.description">{{ct.description}}</td>
+              <td *ngIf="!ct.description">--</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="belongs-to-record">
+        <h3>Record: Identifiers</h3>
+        <p *ngIf="data.location">Home Location:
+          <span>{{data.HomeLocationID}} - {{data.location?.Location}}</span>
+        </p>
+        <p *ngIf="data.departmentId">Department:
+          <span> {{data.departmentId}} - {{data.department?.DepartmentName}}</span>
+        </p>
+        <p>Purpose:
+          <span> {{r?.purposeId}} - {{r?.purpose?.Purpose}}</span>
+        </p>
+        <p *ngIf="data.formatId">Format:
+          <span>{{data.formatId}} - {{data.format?.Format}}</span>
+        </p>
+        <p *ngIf="data.groupId">Group:
+          <span>{{data.groupId}} - {{data.group?.GroupName}}</span>
+        </p>
+        <p *ngIf="data.projectId">Project:
+          <span>{{data.ProjectID}} - {{data.project?.ProjectName}}</span>
+        </p>
+      </div>
+      <div class="belongs-to-record asc">
+        <h3>Content Related</h3>
+        <p>Author: <span> {{data.authorArtist}}</span></p>
+        <p>Item Title: <span> {{data.itemIdentification?.Title}}</span></p>
+        <p>Collection Name: <span> {{data.collectionName}}</span></p>
+        <p>Comments: <span> {{data.comments}}</span></p>
+        <p>Fund Memo: <span> {{data.fundMemo}}</span></p>
+        <p>Date Of Object: <span> {{data.dateOfObject}}</span></p>
+        <p>Expected Return: <span> {{data.expectedDateOfReturn}}</span></p>
+        <p>HOLLIS: <span> {{data.hollisNumber}}</span></p>
+        <p>Insurance Value: <span> {{data.insuranceValue}}</span></p>
+        <p>Storage: <span> {{data.storage}}</span></p>
+      </div>
+      <div class="belongs-to-record asc">
+        <h3>Administered by:</h3>
+        <p *ngIf="data.coordinatorId">Coordinator:
+          <span>#{{data.coordinatorId}} -{{data.Coordinator?.DisplayName}}</span>
+        </p>
+        <p *ngIf="data.approvingCuratorId">Approving Curator:
+          <span>#{{data.approvingCuratorId}} - {{data.CuratorPlus?.DisplayName}}
+        </span>
+        </p>
+        <p *ngIf="data.curatorId">Curator:
+          <span>#{{data.curatorId}}-{{data.Curator?.DisplayName}}</span>
+        </p>
+        <p *ngIf="data.editedById">Edited By:
+          <span>{{data.editedById}} - {{data.Editor?.DisplayName}} </span>
+        </p>
+        <p *ngIf="data.chargeToId">Charge To ID: <span> {{data.chargeToId}}</span></p>
+        <p *ngIf="data.itemIdentification?.item?.workAssignedTos">Work Assigned To:
+          <span *ngFor="let wat of data.itemIdentification.item.workAssignedTos">
+        {{wat.personId}}
+            {{wat.person?.displayName}}
+      </span>
+        </p>
+      </div>
+      <div class="belongs-to-record asc">
+        <h3>Status Related</h3>
+        <p>Item is
+          <span *ngIf="data.inactive"> Inactive</span>
+          <span *ngIf="!data.inactive">Active</span>
+        </p>
+        <p *ngIf="data.editCounter">The Counter has been edited</p>
+        <p *ngIf="!data.editCounter">The Counter has not been edited</p>
+        <p *ngIf="data.isBeingEdited">The record has been edited</p>
+        <p *ngIf="!data.isBeingEdited">The record has not been edited</p>
+        <p *ngIf="data.isNonCollectionMaterial">It is not a Collection material</p>
+        <p *ngIf="!data.isNonCollectionMaterial">It is a Collection material</p>
+        <p *ngIf="data.nonDigitalImagesExist">Contains non-digital images</p>
+        <p *ngIf="!data.nonDigitalImagesExist">Does not have non-digital images</p>
+        <p>Was It Manually Closed?:
+          <span *ngIf="data.manuallyClosed">Yes</span>
+          <span *ngIf="!data.manuallyClosed">No</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button color="primary" >Edit</button>
+  <button mat-button color="warn" (click)="onDelete(data.recordId)">Delete</button>
+</mat-dialog-actions>

@@ -1,0 +1,62 @@
+<div>
+  <app-form-report-edit [report]="report" [coordinators]="coordinators" (onedit)="onSaveReport($event)">
+    <section class="work-done-section">
+      <!--        <fieldset>-->
+      <p mat-line>Work Done By*</p>
+      <mat-accordion>
+        <form [formGroup]="workDoneForm" fxLayout="column">
+          <div formArrayName="contributors">
+            <mat-expansion-panel *ngFor="let item of getControls(); let i = index;">
+              <mat-expansion-panel-header>
+                <mat-chip-list>
+                  <mat-chip color="accent" selected>
+              <span
+                *ngIf="doneName">{{doneName?.selected?.viewValue}}</span> {{doneDate.value | date}} {{doneHours.value}}
+                    <mat-icon (click)="removePerson(i)">cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </mat-expansion-panel-header>
+              <div [formGroupName]="i">
+                <mat-form-field>
+                  <mat-label> Work Done By</mat-label>
+                  <mat-select
+                    #doneName
+                    placeholder="Name"
+                    [value]=""
+                    formControlName="personId">
+                    <mat-option *ngFor="let c of coordinators | orderBy: order"
+                                [value]="c.personId">{{c.displayName}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div class="date-time-div">
+                  <mat-form-field>
+                    <input
+                      #doneDate
+                      matInput
+                      formControlName="dateCompleted"
+                      [matDatepicker]="pickerA"
+                      placeholder="Date">
+                    <mat-datepicker-toggle matPrefix [for]="pickerA"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerA></mat-datepicker>
+                  </mat-form-field>
+                  <mat-form-field>
+                    <input matInput
+                           #doneHours
+                           type="number"
+                           placeholder="Total Hours"
+                           formControlName="completedHours"
+                    >
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </form>
+      </mat-accordion>
+      <button mat-icon-button (click)="addPerson()">
+        <mat-icon>library_add</mat-icon>
+      </button>
+      <!--        </fieldset>-->
+    </section>
+  </app-form-report-edit>
+</div>

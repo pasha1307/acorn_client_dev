@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  width: 100%;
+}
+.mat-search-field {
+  display: block;
+  margin: auto;
+  max-width: 350px;
+}
+.search-mat-field {
+  display: block;
+  margin: auto;
+  max-width: 350px;
+}
+table {
+  max-width: 800px;
+  width: 100%;
+  margin: auto;
+  tr:hover {
+    cursor: pointer;
+    background-color: rgba(255,0,0,.1);
+  }
+}
+.no-files-div {
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.tooltip-del-info {
+  background-color: rgba(255,0,0,.9);
+}
+.tooltip-zoom-info {
+  background-color: rgba(0,0,255,.9);
+}
